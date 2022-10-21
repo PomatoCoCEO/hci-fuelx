@@ -1,0 +1,23 @@
+{
+  "name": "fuelx",
+  "version": "1.0.0",
+  "description": "Fuelled by the increses in fuel prices",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "fuel",
+    "gas",
+    "prices",
+    "retro",
+    "pixel",
+    "art"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.5.3"
+  }
+}

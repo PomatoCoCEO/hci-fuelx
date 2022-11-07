@@ -51,13 +51,14 @@ class Sprite {
         this.currentAnimationFrame = (this.currentAnimationFrame + 1) % this.animations[this.currentAnimation].length;
     }
 
-    draw(ctx) {
+    draw(ctx, camera) {
         const [x, y] = this.frame;
+
 
         this.isLoaded && ctx.drawImage(this.image,
                                        x * 64, y * 64,
                                        64, 64,
-                                       this.gameObject.x, this.gameObject.y,
+                                       (this.gameObject.x - camera.x)+3*64, (this.gameObject.y - camera.y)+2*64,
                                        64, 64
         );
 

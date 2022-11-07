@@ -11,13 +11,13 @@ body {
 
 .game-container {
     position: relative;
-    width: 352px;
-    height: 198px;
+    width: 448px;
+    height: 320px;
     margin: 0 auto;
     margin-top: 20px;
     outline: 1px solid #fff;
 
-    transform: scale(3) translateY(50%);
+    transform: scale(2) translateY(50%);
 }
 
 .game-container canvas {

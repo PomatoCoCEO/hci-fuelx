@@ -9,7 +9,8 @@ class Sprite {
 
         this.animations = config.animations;
 
-        this.currentAnimation = config.currentAnimation || 'idle-down';
+        
+        this.currentAnimation = config.currentAnimation;
         this.currentAnimationFrame = 0;
 
         this.animationFrameLimit = config.animationFrameLimit || 8;

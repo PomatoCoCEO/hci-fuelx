@@ -1,5 +1,6 @@
-class TerrainTile {
-    constructor (fuelLevel, hasCactus, hasTumbleWeed) {
+class TerrainTile extends GameObject {
+    constructor (config, fuelLevel, hasCactus, hasTumbleWeed) {
+        super(config);
         this.fuelLevel = fuelLevel;
         if(fuelLevel == 0) {
             this.hasCactus = hasCactus;

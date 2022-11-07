@@ -14,6 +14,10 @@ class Player extends GameObject {
 
         this.isPlayerControlled = config.isPlayerControlled || false;
         this.movingProgressRemaining = 0;
+        this.sprite = new PlayerSprite({
+            src: config.src || undefined,
+            gameObject: this
+        });
     }
 
     updatePosition() {

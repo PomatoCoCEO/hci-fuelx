@@ -1,17 +1,16 @@
 class Tumbleweed extends GameObject {
     constructor(config) {
         super(config);
-        this.sprite = new Sprite({
-            src: "static/images/tumbleweed.png",
-            gameObject: this
-        });
-
         this.directionUpdate = {
             'left': ['x', -1],
             'right': ['x', 1]
         }
         this.direction = config.direction || 'left';
         this.thresX = config.thresX || 1000;
+        this.sprite = new TumbleweedSprite({
+            src: "static/images/tumbleweed.png",
+            gameObject: this
+        });
         console.log("tumbleweed x: ",this.x);
     }
 

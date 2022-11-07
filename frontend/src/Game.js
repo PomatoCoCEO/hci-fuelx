@@ -4,22 +4,20 @@ class Game {
         this.container = config.container;
         this.canvas = this.container.querySelector('.game-canvas');
         this.ctx = this.canvas.getContext('2d');
-
-        this.player = new Player({
-            src: 'static/images/player.png',
-            name: 'Bruh'
-        });
-
-        this.player.sprite.setAnimation('walk-down');
     }
 
     gameLoop() {
-        // this.ctx.clearRect(0, 0, this.canvas.weight, this.canvas.height);
-        this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = "#333";
-        this.ctx.fill();
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.player.sprite.draw(this.ctx);
+        Object.values(this.gameObjects).forEach(object => { // update directions in each player
+           object.update({
+               direction: this.directionInput.direction
+           });
+        });
+
+        Object.values(this.gameObjects).forEach(object => { // draw player animations
+            object.sprite.draw(this.ctx);
+        });
     }
 
     startGameLoop() {
@@ -35,7 +33,16 @@ class Game {
     }
 
     init() {
-        console.log("goodbye bruh world");
+        this.directionInput = new DirectionInput();
+        this.directionInput.init();
+
+        this.gameObjects = {
+            'player': new Player({
+                src: 'static/images/player.png',
+                name: 'Player',
+                isPlayerControlled: true
+            })
+        }
 
         this.startGameLoop();
     }

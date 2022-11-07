@@ -57,7 +57,7 @@ class Sprite {
         this.isLoaded && ctx.drawImage(this.image,
                                        x * 64, y * 64,
                                        64, 64,
-                                       0, 0,
+                                       this.gameObject.x, this.gameObject.y,
                                        64, 64
         );
 

@@ -31,3 +31,13 @@ body {
   top: 0;
   height: 10%;
 }
+
+
+#timer {
+    color: red;
+    margin-top: 0px;
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 0%;
+}

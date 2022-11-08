@@ -1,13 +1,34 @@
 class Game {
 
     constructor(config) {
+        this.timer = document.getElementById("timer");
+        this.begin_time = new Date().getTime();
         this.container = config.container;
         this.canvas = this.container.querySelector('.game-canvas');
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
+        this.socket = io('localhost:4000');
+    }
+
+    updateTimer() {
+        var now = new Date().getTime();
+
+        var dif = this.begin_time - now;
+
+        var minutes = Math.floor((dif % (1000 * 60 * 60)) / (1000 * 60))+10;
+        var seconds = Math.floor((dif % (1000 * 60)) / 1000)+60;
+
+        if(seconds < 10) {
+            this.timer.innerHTML = minutes.toString() + ":0" + seconds.toString();
+        }else {
+            this.timer.innerHTML = minutes.toString() + ":" + seconds.toString();
+        }
+
+
     }
 
     gameLoop() {
+        this.updateTimer();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         Object.values(this.gameObjects).forEach(object => { // update directions in each player
            if (object instanceof Player) {
@@ -33,6 +54,7 @@ class Game {
             }
         });
     }
+    
 
     isCellAvailable(x, y) {
         if (this.gameObjects.some(object => {

@@ -1,6 +1,5 @@
 class Game {
 
-
     constructor(config) {
         this.container = config.container;
         this.canvas = this.container.querySelector('.game-canvas');
@@ -13,16 +12,42 @@ class Game {
         Object.values(this.gameObjects).forEach(object => { // update directions in each player
            if (object instanceof Player) {
                object.update({
-                   direction: this.directionInput.direction
+                    direction: this.directionInput.direction,
+                    action: this.actionInput.action
                });
+               object.drills.forEach(drill => {
+                    drill.updateAnimationProgress();
+                });
            }
            else object.update();
         });
         let player = this.gameObjects[0];
-        console.log(player.x);
+        // console.log(player.x);
         this.gameObjects.forEach(object => { // draw player animations
             object.sprite.draw(this.ctx, player);
+            if (object instanceof Player) {
+                object.drills.forEach(drill => {
+                    console.log("drill in x ",drill.x,"and y ", drill.y );
+                    drill.sprite.draw(this.ctx, player);
+                });
+            }
         });
+    }
+
+    isCellAvailable(x, y) {
+        if (this.gameObjects.some(object => {
+            return (!(object instanceof Player) && object.x ===x && object.y === y);
+        })) return false;
+        else {
+            for(const element of this.gameObjects) {
+                if (element instanceof Player) {
+                    for(const drill of element.drills) {
+                        if (drill.x === x && drill.y === y) return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 
     startGameLoop() {
@@ -40,6 +65,8 @@ class Game {
     init() {
         this.directionInput = new DirectionInput();
         this.directionInput.init();
+        this.actionInput = new ActionInput();
+        this.actionInput.init();
         this.ctx.fillStyle = '#fce899';
         this.ctx.fillRect(0,0,this.ctx.height, this.ctx.width);
 
@@ -49,7 +76,8 @@ class Game {
                     new Cactus({
                         src: "static/images/cactus.png",
                         x: Math.floor(10*Math.random())*64,
-                        y: Math.floor(10*Math.random())*64
+                        y: Math.floor(10*Math.random())*64,
+                        game: this
                     }));
         }
 
@@ -58,7 +86,8 @@ class Game {
                     new Tumbleweed({
                         src: "static/images/tumbleweed.png",
                         x: Math.floor(10*Math.random())*64,
-                        y: Math.floor(10*Math.random())*64
+                        y: Math.floor(10*Math.random())*64,
+                        game: this
                     }));
         }
 
@@ -66,14 +95,16 @@ class Game {
             new Player({
                 src: 'static/images/player.png',
                 name: 'Player',
-                isPlayerControlled: true
+                isPlayerControlled: true,
+                game: this
             }),
             new Player({
                 src: 'static/images/player.png',
                 name: 'Player',
                 isPlayerControlled: false,
                 x:64,
-                y:64
+                y:64,
+                game: this
             }),
             ...decorations
         ]

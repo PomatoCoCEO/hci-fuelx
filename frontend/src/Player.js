@@ -18,6 +18,7 @@ class Player extends GameObject {
             src: config.src || undefined,
             gameObject: this
         });
+        this.drills = []; // for the drills in the user's inventory
     }
 
     updatePosition() {
@@ -36,6 +37,7 @@ class Player extends GameObject {
 
     startBehaviour(config, behavior) {
         this.direction = config.direction;
+        this.action = config.action;
         if(behavior.type === 'walk') {
             // TODO: Verify if next position is empty
             this.movingProgressRemaining = 64;
@@ -46,12 +48,31 @@ class Player extends GameObject {
         if(this.movingProgressRemaining > 0) {
             this.updatePosition();
         } else {
-            if(this.isPlayerControlled && config.direction) {
-                this.startBehaviour(config, {
-                    type: 'walk'
-                });
-            }
+            if(this.isPlayerControlled){
+                if(config.direction) {
+                    this.startBehaviour(config, {
+                        type: 'walk'
+                    });
+                }
+                else if(config.action === 'commit-to-jerrycans') {
+                    this.commitToJerrycans();
+                }
+                else if (config.action === 'drill') {
+                    if(this.game.isCellAvailable(this.x, this.y)) {
+                        console.log("Pushing new drill....");
+                        this.drills.push(new Drill({
+                            src: "static/images/drill.png",
+                            x: this.x,
+                            y: this.y,
+                            game: this.game
+                        }));
+                    }
+                    else {
+                        console.log("Cell not available");
+                    }
+                }
             this.updateSprite();
+            }
         }
     }
 
@@ -65,5 +86,4 @@ class Player extends GameObject {
         return fuel <= 0;
     }
     
-
 }

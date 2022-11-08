@@ -6,6 +6,7 @@ class GameObject {
             src: config.src || undefined,
             gameObject: this
         });
+        this.game = config.game;
     }
 
 }

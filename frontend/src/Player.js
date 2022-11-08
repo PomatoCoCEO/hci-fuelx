@@ -19,6 +19,7 @@ class Player extends GameObject {
             gameObject: this
         });
         this.drills = []; // for the drills in the user's inventory
+        this.healthBar = document.getElementById("health");
     }
 
     updatePosition() {
@@ -30,9 +31,11 @@ class Player extends GameObject {
     updateSprite() {
         if(this.movingProgressRemaining > 0) {
             this.sprite.setAnimation('walk-' + this.direction);
+            this.healthBar.value--;
         } else {
             this.sprite.setAnimation('idle-' + this.direction);
         }
+        
     }
 
     startBehaviour(config, behavior) {

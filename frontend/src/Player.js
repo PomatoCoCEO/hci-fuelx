@@ -40,10 +40,41 @@ class Player extends GameObject {
 
     startBehaviour(config, behavior) {
         this.direction = config.direction;
+        this.game.socketHandler.movePlayer(config.direction);
         this.action = config.action;
         if(behavior.type === 'walk') {
             // TODO: Verify if next position is empty
             this.movingProgressRemaining = 64;
+        }
+    }
+
+    forceUpdate(config) {
+        if(this.movingProgressRemaining > 0) {
+            this.updatePosition();
+        } else {
+                if(config.direction) {
+                    this.startBehaviour(config, {
+                        type: 'walk'
+                    });
+                }
+                else if(config.action === 'commit-to-jerrycans') {
+                    this.commitToJerrycans();
+                }
+                else if (config.action === 'drill') {
+                    if(this.game.isCellAvailable(this.x, this.y)) {
+                        console.log("Pushing new drill....");
+                        this.drills.push(new Drill({
+                            src: "static/images/drill.png",
+                            x: this.x,
+                            y: this.y,
+                            game: this.game
+                        }));
+                    }
+                    else {
+                        console.log("Cell not available");
+                    }
+                }
+            this.updateSprite();
         }
     }
 

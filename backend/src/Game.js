@@ -2,6 +2,7 @@ export default class Game {
 
     constructor() {
         this.observers = [];
+        this.players = [];
     }
 
     subscribe(observerFunction) {
@@ -14,9 +15,38 @@ export default class Game {
     }
 
     disconnectPlayer(player) {
+        this.players = this.players.filter(p => p.name !== player);
         this.notifyAll({
-            type: 'disonnect-player',
+            type: 'disconnect-player',
             args: player
+        });
+    }
+
+    connectPlayer(player) {
+        if(this.players.indexOf(player) === -1)
+            this.players.push({
+                name: player,
+                x: 0,
+                y: 0
+            });
+        this.notifyAll({
+            type: 'connect-player',
+            args: this.players
+        });
+    }
+
+    
+    movePlayer(playerName, x, y, direction) {
+        let index = this.players.findIndex(p => p.name === playerName);
+        console.log(playerName, x, y, direction);
+        this.players[index].x = x;
+        this.players[index].x = y;
+        this.notifyAll({
+            type: 'move-player',
+            args: {
+                name: playerName,
+                direction
+            }
         });
     }
 

@@ -7,7 +7,6 @@ class Game {
         this.canvas = this.container.querySelector('.game-canvas');
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
-        this.socket = io('localhost:4000');
     }
 
     updateTimer() {
@@ -31,27 +30,27 @@ class Game {
         this.updateTimer();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         Object.values(this.gameObjects).forEach(object => { // update directions in each player
-           if (object instanceof Player) {
-               object.update({
-                    direction: this.directionInput.direction,
-                    action: this.actionInput.action
-               });
-               object.drills.forEach(drill => {
-                    drill.updateAnimationProgress();
-                });
-           }
-           else object.update();
+           object.update();
         });
-        let player = this.gameObjects[0];
-        // console.log(player.x);
+        Object.values(this.players).forEach(player => {
+            player.update({
+                direction: this.directionInput.direction,
+                action: this.actionInput.action
+            });
+            player.drills.forEach(drill => {
+                drill.updateAnimationProgress();
+            });
+        });
+
+        let player = this.players[0];
         this.gameObjects.forEach(object => { // draw player animations
             object.sprite.draw(this.ctx, player);
-            if (object instanceof Player) {
-                object.drills.forEach(drill => {
-                    console.log("drill in x ",drill.x,"and y ", drill.y );
-                    drill.sprite.draw(this.ctx, player);
-                });
-            }
+        });
+        this.players.forEach(object => {
+            object.sprite.draw(this.ctx, player);
+            object.drills.forEach(drill => {
+                drill.sprite.draw(this.ctx, player);
+            })
         });
     }
     
@@ -61,11 +60,9 @@ class Game {
             return (!(object instanceof Player) && object.x ===x && object.y === y);
         })) return false;
         else {
-            for(const element of this.gameObjects) {
-                if (element instanceof Player) {
-                    for(const drill of element.drills) {
-                        if (drill.x === x && drill.y === y) return false;
-                    }
+            for(const element of this.players) {
+                for(const drill of element.drills) {
+                    if (drill.x === x && drill.y === y) return false;
                 }
             }
             return true;
@@ -84,9 +81,51 @@ class Game {
         frame();
     }
 
+    movePlayer(name, direction) {
+        if(name === this.socketHandler.socket.id)
+            return;
+        const index = this.players.findIndex(player => player.name === name);
+        console.log('MOVE: ', name, direction, index);
+        this.players[index].forceUpdate({
+            direction
+        });
+    }
+
+    addPlayer({name, x, y}) {
+        console.log('ADD: ' + name);
+        if(name === this.socketHandler.socket.id)
+            return;
+        const index = this.players.findIndex(player => player.name === name);
+        console.log(this.players, name);
+        console.log(index);
+
+        if(index === -1) {
+            this.players.push(
+                new Player({
+                    src: 'static/images/player.png',
+                    name,
+                    isPlayerControlled: false,
+                    x,
+                    y,
+                    game: this
+                })
+            );
+        }
+        console.log(this.players);
+    }
+
+    removePlayer(playerName) {
+
+    }
+
     init() {
         this.directionInput = new DirectionInput();
         this.directionInput.init();
+        this.socketHandler = new SocketHandler({
+            connectString: "ws://localhost:4000",
+            game: this
+        });
+        this.socketHandler.init();
         this.actionInput = new ActionInput();
         this.actionInput.init();
         this.ctx.fillStyle = '#fce899';
@@ -113,26 +152,20 @@ class Game {
                     }));
         }
 
-        this.gameObjects = [
+        this.players = [
             new Player({
                 src: 'static/images/player.png',
-                name: 'Player',
+                name: this.socketHandler.socket.id,
                 isPlayerControlled: true,
                 game: this
-            }),
-            new Player({
-                src: 'static/images/player.png',
-                name: 'Player',
-                isPlayerControlled: false,
-                x:64,
-                y:64,
-                game: this
-            }),
+            })
+        ]
+
+        this.gameObjects = [
             ...decorations
         ]
 
-        console.log("length of gameObjects: ",this.gameObjects.length);
-
+        console.log("length of gameObjects: ", this.gameObjects.length);
         this.startGameLoop();
     }
 

@@ -1,4 +1,4 @@
-export class Player {
+export default class Player {
     constructor(id, name, x, y, direction) {
         this.id = id;
         this.name = name;
@@ -8,5 +8,20 @@ export class Player {
         this.fuel = 100;
         this.jerrycans = 0;
         this.health = 100;
+
+        this.directionUpdate = {
+            'up': ['y', -64],
+            'down': ['y', 64],
+            'left': ['x', -64],
+            'right': ['x', 64]
+        }
     }
+
+    move(direction) {
+        if(!this.directionUpdate[direction])
+            return;
+        const [property, change] = this.directionUpdate[direction];
+        this[property] += change;
+    }
+
 }

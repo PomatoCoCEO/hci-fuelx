@@ -17,27 +17,91 @@ body {
     margin-top: 20px;
     outline: 1px solid #fff;
 
-    transform: scale(2) translateY(50%);
+    transform: scale(2) translateY(40%);
 }
 
 .game-container canvas {
     image-rendering: pixelated;
 }
 
+.Character_name-container {
+    position: absolute;
+    top: -12px;
+    left: -5px;
+    font-size: 5px;
+    padding: 1px 2px 1px;
+    border-radius: 3px;
+    background: #333;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
 
+.grid-cell {
+    position: absolute;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: center;
+}
+
+  .Character.you {
+    z-index: 1;
+  }
+  .Character.you .Character_you-arrow {
+    display: block;
+  }
+
+  .Character_name-container {
+    position: absolute;
+    top: -12px;
+    left: -5px;
+    font-size: 10px;
+    padding: 1px 2px 1px;
+    border-radius: 3px;
+    background: #333;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-family: 'Common Pixel', sans-serif;
+                                                
+  }
+  .Character_coins {
+    margin-left: 1px;
+    color: gold;
+  }
+  
 #health {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   position: absolute;
   left: 0;
   top: 0;
   height: 10%;
+  accent-color: green;
 }
 
-
 #timer {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     color: red;
     margin-top: 0px;
     color: white;
     position: absolute;
     left: 50%;
     top: 0%;
+    font-family: 'Common Pixel', sans-serif;                             
 }

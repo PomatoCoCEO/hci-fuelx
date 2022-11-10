@@ -17,7 +17,7 @@ class PlayerSprite extends Sprite {
         this.currentAnimation = config.currentAnimation || 'idle-down';
         this.currentAnimationFrame = 0;
 
-        this.animationFrameLimit = config.animationFrameLimit || 8;
+        this.animationFrameLimit = config.animationFrameLimit || 6;
         // number of time frames per animation frame "time frames"
         // "https://en.wikipedia.org/wiki/Planck_units"
         this.animationFrameProgress = this.animationFrameLimit;
@@ -51,6 +51,9 @@ class PlayerSprite extends Sprite {
         const [x, y] = this.frame;
 
         let dim = 32;
+
+        this.gameObject.updateName(camera);
+
         this.isLoaded && ctx.drawImage(this.image,
                                        x * dim, y * dim,
                                        dim, dim,

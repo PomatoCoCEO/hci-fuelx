@@ -6,10 +6,9 @@ class SocketHandler {
     }
 
     movePlayer(direction) {
+        console.log('Move?');
         this.socket.emit('move-player', {
-            name: this.socket.id,
-            x: 0,
-            y: 0,
+            playerId: this.socket.id,
             direction
         });
     }
@@ -19,9 +18,8 @@ class SocketHandler {
             console.log(`Connected with id ${this.socket.id}`);
 
             this.socket.on('connect-player', (command) => {
-                for(let player of command.args) {
+                for(let player of command.args)
                     this.game.addPlayer(player);
-                }
             });
 
             this.socket.on('disconnect-player', (command) => {
@@ -29,9 +27,11 @@ class SocketHandler {
             });
 
             this.socket.on('move-player', (command) => {
-                this.game.movePlayer(command.args.name, command.args.direction);
+                this.game.movePlayer(command.args);
             });
         });
+
+        return this.socket.id;
     }
 
 }

@@ -1,8 +1,30 @@
+import Player from "./Player.js";
+
 export default class Game {
 
     constructor() {
         this.observers = [];
         this.players = [];
+    }
+
+    playerIndex(playerId) {
+        return this.players.findIndex(player => player.id === playerId);
+    }
+
+    removePlayer(playerId) {
+        this.players = this.players.filter(player => player.id !== playerId);
+    }
+
+    instantiatePlayer(playerId) {
+        this.players.push(
+            new Player(
+                playerId,
+                'Name...',
+                0,
+                0,
+                'down'
+            )
+        );
     }
 
     subscribe(observerFunction) {
@@ -14,37 +36,35 @@ export default class Game {
             observerFunction(command);
     }
 
-    disconnectPlayer(player) {
-        this.players = this.players.filter(p => p.name !== player);
+    disconnectPlayer(playerId) {
+        this.removePlayer(playerId);
         this.notifyAll({
             type: 'disconnect-player',
-            args: player
+            args: playerId
         });
     }
 
-    connectPlayer(player) {
-        if(this.players.indexOf(player) === -1)
-            this.players.push({
-                name: player,
-                x: 0,
-                y: 0
-            });
+    connectPlayer(playerId) {
+        if(this.playerIndex(playerId) === -1)
+            this.instantiatePlayer(playerId);
         this.notifyAll({
             type: 'connect-player',
             args: this.players
         });
     }
 
-    
-    movePlayer(playerName, x, y, direction) {
-        let index = this.players.findIndex(p => p.name === playerName);
-        console.log(playerName, x, y, direction);
-        this.players[index].x = x;
-        this.players[index].x = y;
+    movePlayer({ playerId, direction }) {
+        console.log(playerId, direction);
+        let index = this.playerIndex(playerId);
+        if(index === -1)
+            return;
+        
+        this.players[index].move(direction);
+
         this.notifyAll({
             type: 'move-player',
             args: {
-                name: playerName,
+                playerId,
                 direction
             }
         });

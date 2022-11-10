@@ -22,35 +22,28 @@ class Game {
         }else {
             this.timer.innerHTML = minutes.toString() + ":" + seconds.toString();
         }
-
-
     }
 
     gameLoop() {
         this.updateTimer();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        Object.values(this.gameObjects).forEach(object => { // update directions in each player
-           object.update();
-        });
-        Object.values(this.players).forEach(player => {
-            player.update({
-                direction: this.directionInput.direction,
-                action: this.actionInput.action
-            });
-            player.drills.forEach(drill => {
-                drill.updateAnimationProgress();
-            });
-        });
+        
+        Object.values(this.gameObjects).forEach(objects => {
+            for(let object of objects) {
+                object.update({
+                    direction: this.directionInput.direction,
+                    action: this.actionInput.action
+                });
+                object.updatePending();
+            }
+        })
 
-        let player = this.players[0];
-        this.gameObjects.forEach(object => { // draw player animations
-            object.sprite.draw(this.ctx, player);
-        });
-        this.players.forEach(object => {
-            object.sprite.draw(this.ctx, player);
-            object.drills.forEach(drill => {
-                drill.sprite.draw(this.ctx, player);
-            })
+        let camera = this.gameObjects.players[0];
+
+        Object.values(this.gameObjects).forEach(objects => {
+            for(let object of objects) {
+                object.sprite.draw(this.ctx, camera);
+            }
         });
     }
     
@@ -81,91 +74,76 @@ class Game {
         frame();
     }
 
-    movePlayer(name, direction) {
-        if(name === this.socketHandler.socket.id)
+    movePlayer({ playerId, direction }) {
+        console.log(playerId, direction)
+        if(playerId === this.socketHandler.socket.id)
             return;
-        const index = this.players.findIndex(player => player.name === name);
-        console.log('MOVE: ', name, direction, index);
-        this.players[index].forceUpdate({
+        console.log(this.gameObjects);
+        const index = this.playerIndex(playerId);
+        console.log('MOVE: ', playerId, direction, index);
+        this.gameObjects.players[index].forceUpdate({
             direction
         });
     }
 
-    addPlayer({name, x, y}) {
-        console.log('ADD: ' + name);
-        if(name === this.socketHandler.socket.id)
+    playerIndex(playerId) {
+        return this.gameObjects.players.findIndex(player => player.id === playerId);
+    }
+
+    addPlayer(player) {
+        if(player.id === this.socketHandler.socket.id) {
+            this.gameObjects.players[0].id = this.socketHandler.socket.id;
             return;
-        const index = this.players.findIndex(player => player.name === name);
-        console.log(this.players, name);
-        console.log(index);
+        }
+        const index = this.playerIndex(player.id);
 
         if(index === -1) {
-            this.players.push(
+            this.gameObjects.players.push(
                 new Player({
+                    id: player.id,
                     src: 'static/images/player.png',
-                    name,
+                    name: player.name,
                     isPlayerControlled: false,
-                    x,
-                    y,
+                    x: player.x,
+                    y: player.y,
                     game: this
                 })
             );
         }
-        console.log(this.players);
     }
 
-    removePlayer(playerName) {
-
+    removePlayer(playerId) {
+        const index = this.playerIndex(playerId);
+        if(index !== -1) {
+            this.gameObjects.players[index].element.remove();
+        }
+        this.gameObjects.players = this.gameObjects.players.filter(player => player.id !== playerId);
+        console.log(this.gameObjects.players);
     }
 
     init() {
         this.directionInput = new DirectionInput();
         this.directionInput.init();
+        this.actionInput = new ActionInput();
+        this.actionInput.init();
         this.socketHandler = new SocketHandler({
             connectString: "ws://localhost:4000",
             game: this
         });
-        this.socketHandler.init();
-        this.actionInput = new ActionInput();
-        this.actionInput.init();
-        this.ctx.fillStyle = '#fce899';
-        this.ctx.fillRect(0,0,this.ctx.height, this.ctx.width);
 
-        let decorations = [];
-        for(let i = 0; i< 100; i++) {
-            decorations.push(
-                    new Cactus({
-                        src: "static/images/cactus.png",
-                        x: Math.floor(10*Math.random())*64,
-                        y: Math.floor(10*Math.random())*64,
-                        game: this
-                    }));
+        this.gameObjects = {
+            players: [
+                new Player({
+                    id: this.socketHandler.init(),
+                    src: 'static/images/player.png',
+                    name: 'PLAYER_NAME',
+                    isPlayerControlled: true,
+                    game: this
+                })
+            ],
+            decorations: []
         }
 
-        for(let i = 0; i<5; i++) {
-            decorations.push(
-                    new Tumbleweed({
-                        src: "static/images/tumbleweed.png",
-                        x: Math.floor(10*Math.random())*64,
-                        y: Math.floor(10*Math.random())*64,
-                        game: this
-                    }));
-        }
-
-        this.players = [
-            new Player({
-                src: 'static/images/player.png',
-                name: this.socketHandler.socket.id,
-                isPlayerControlled: true,
-                game: this
-            })
-        ]
-
-        this.gameObjects = [
-            ...decorations
-        ]
-
-        console.log("length of gameObjects: ", this.gameObjects.length);
         this.startGameLoop();
     }
 

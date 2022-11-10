@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import Game from './game.js';
+import Game from './Game.js';
 
 const SERVER_PORT = 4000;
 const httpServer = createServer();
@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('move-player', (command) => {
-        game.movePlayer(command.name, command.x, command.y, command.direction);
+        game.movePlayer(command);
     });
 });
 

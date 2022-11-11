@@ -20,6 +20,7 @@ class TerrainTile extends GameObject {
         let val = (hash ^ key);
         if (val % 4 == 0) {
             this.fl = (val % 400) /4;
+            if(this.fl < 0) this.fl = -this.fl;
             return this.fl;
         }
         this.fl = 0;
@@ -34,24 +35,26 @@ class TerrainTile extends GameObject {
         // let fuel_50 = parseInt("ff8800", 16);  // orange
         let fuel_50 = [parseInt("ff", 16), parseInt("88", 16), parseInt("00", 16)];
         let fuel_max = [parseInt("6f", 16), parseInt("3f", 16), parseInt("00", 16)];
-        let val_color = 0;
+        let val_color = [];
         if ( f < 50) {
-            let perc = f * 2;
+            let perc = (f+0.0) * 2/100;
             val_color = [
-                fuel_zero[0] + (fuel_50[0] - fuel_zero[0]) * perc / 100,
-                fuel_zero[1] + (fuel_50[1] - fuel_zero[1]) * perc / 100,
-                fuel_zero[2] + (fuel_50[2] - fuel_zero[2]) * perc / 100
+                fuel_zero[0] * (1-perc) + perc * fuel_50[0],
+                fuel_zero[1] * (1-perc) + perc * fuel_50[1],
+                fuel_zero[2] * (1-perc) + perc * fuel_50[2]
             ]
         }
         else {
-            let perc = (f - 50) * 2;
+            let perc = (f+0.0 - 50) * 2/100;
             val_color = [
-                fuel_50[0] + (fuel_max[0] - fuel_50[0]) * perc / 100,
-                fuel_50[1] + (fuel_max[1] - fuel_50[1]) * perc / 100,
-                fuel_50[2] + (fuel_max[2] - fuel_50[2]) * perc / 100
+                fuel_50[0] * (1-perc) + perc * fuel_max[0],
+                fuel_50[1] * (1-perc) + perc * fuel_max[1],
+                fuel_50[2] * (1-perc) + perc * fuel_max[2]
             ];
         }
-        return "#" + Math.floor(val_color[0]).toString(16) + Math.floor(val_color[1]).toString(16) + Math.floor(val_color[2]).toString(16); 
+        return "rgb(" + Math.floor(val_color[0]).toString() +","+ 
+                Math.floor(val_color[1]).toString()+"," + 
+                Math.floor(val_color[2]).toString()+")"; 
         // for a better gradient, considering all the channels
     }
 

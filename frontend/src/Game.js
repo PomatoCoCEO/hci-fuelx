@@ -97,7 +97,7 @@ class Game {
         this.directionInput = new DirectionInput();
         this.directionInput.init();
         this.socketHandler = new SocketHandler({
-            connectString: "ws://localhost:4000",
+            connectString: "ws://atomicbits.pt:8080",
             game: this
         });
         
@@ -117,6 +117,26 @@ class Game {
                 })
             ],
             decorations: []
+        }
+
+        for(let i = 0; i < 100; i++) {
+            this.gameObjects.decorations.push(
+                    new Cactus({
+                        src: "static/images/cactus.png",
+                        x: (i < 50 ? -1 : 1) * Math.floor(10*Math.random())*64,
+                        y: (i < 50 ? -1 : 1) * Math.floor(10*Math.random())*64,
+                        game: this
+                    }));
+        }
+
+        for(let i = 0; i<5; i++) {
+            this.gameObjects. decorations.push(
+                    new Tumbleweed({
+                        src: "static/images/tumbleweed.png",
+                        x: Math.floor(10*Math.random())*64,
+                        y: Math.floor(10*Math.random())*64,
+                        game: this
+                    }));
         }
 
         new KeyPressListener("KeyV", () => this.gameObjects.players[0].update({

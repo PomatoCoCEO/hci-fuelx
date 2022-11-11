@@ -18,6 +18,11 @@ class HealthBar {
         this.element.setAttribute("value", this.life);
     }
 
+    increase(val) {
+        this.life+=val;
+        this.element.setAttribute("value", this.life);
+    }
+
     init() {
         this.createElement();
         this.container.appendChild(this.element);

@@ -163,7 +163,7 @@ class Game {
                 })
             ],
             decorations: [],
-            
+            jerrycans: []
         }
 
         for(let i = 0; i < 100; i++) {
@@ -191,6 +191,10 @@ class Game {
 
         new KeyPressListener("KeyV", () => this.gameObjects.players[0].update({
             action: 'drill'
+        }));
+
+        new KeyPressListener("KeyC", () => this.gameObjects.players[0].update({
+            action: 'collect'
         }));
 
         this.startGameLoop();

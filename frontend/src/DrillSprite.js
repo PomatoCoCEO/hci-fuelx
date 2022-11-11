@@ -29,14 +29,15 @@ class DrillSprite extends Sprite {
         // this.tile.fuel -=1;
         let recovered = this.gameObject.tile.decreaseFuel(1);
         this.gameObject.totalFuel +=recovered;
-        if(recovered == 0 || this.gameObject.totalFuel >= 20) {
+        let max_fuel = 20;
+        if(recovered == 0 || this.gameObject.totalFuel >= max_fuel) {
             let index = this.gameObject.game.gameObjects.decorations.indexOf(this.gameObject);
             this.gameObject.game.gameObjects.decorations.splice(index, 1);
-            this.gameObject.game.gameObjects.decorations.push(new Jerrycan({
+            this.gameObject.game.gameObjects.jerrycans.push(new Jerrycan({
                 x: this.gameObject.x,
                 y: this.gameObject.y,
                 game: this.gameObject.game,
-                totalFuel: this.gameObject.totalFuel
+                fuel: this.gameObject.totalFuel
             }));
         }
     }

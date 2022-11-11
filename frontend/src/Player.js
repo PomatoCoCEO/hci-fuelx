@@ -62,6 +62,7 @@ class Player extends GameObject {
         this.direction = config.direction;
         this.action = config.action;
         if(behavior.type === 'walk') {
+            this.fuel --; // you also have to update the fuel in the player!
             this.game.healthBar.decrease(1);
             // TODO: Verify if next position is empty
             this.movingProgressRemaining = 32;
@@ -103,8 +104,8 @@ class Player extends GameObject {
                 else if (config.action === 'drill') {
                     this.makeDrill();
                 }
-                else if (config.action === '') {
-                    
+                else if (config.action === 'collect') {
+                    this.collectFuel();
                 }
             }
         }
@@ -119,7 +120,8 @@ class Player extends GameObject {
     }
 
     makeDrill() {
-        if(this.fuel > 25 && this.game.isCellAvailable(this.x, this.y)) {
+        let drillCost = 10;
+        if(this.fuel > drillCost && this.game.isCellAvailable(this.x, this.y)) {
             let tile = this.game.cells[[this.x, this.y]];
             console.log("tile:", tile);
             this.game.gameObjects.decorations.push(new Drill({
@@ -129,13 +131,32 @@ class Player extends GameObject {
                 game: this.game,
                 tile: tile
             })); // we need a timer function in the drill so that it can be replaced by a jerrycan
-            this.fuel -= 25; // removes 25 fuel after the drill is placed
-            this.game.healthBar.decrease(25);
+            this.fuel -= drillCost; // removes 25 fuel after the drill is placed
+            this.game.healthBar.decrease(drillCost);
         }
     }
 
     isDead() {
         return fuel <= 0;
     }
-    
+    collectFuel() {
+        let t = this.game.gameObjects.jerrycans.findIndex(
+            (jerrycan) => jerrycan.x == this.x && jerrycan.y == this.y);
+        if(t != -1) {
+            let jerry = this.game.gameObjects.jerrycans[t];
+            console.log("jerry fuel: ", jerry.fuel);
+            console.log("player fuel before:", this.fuel)
+            let refill = Math.min(jerry.fuel, 100 - this.fuel);
+            this.fuel += refill;
+            this.game.healthBar.increase(refill);
+            console.log("total player fuel:", this.fuel);
+            if(refill == jerry.fuel) { // fuel over: jerrycan going away
+                console.log("removing jerrycan")
+                this.game.gameObjects.jerrycans.splice(t, 1);
+            } else { // fuel not over, jerry can be used again
+                jerry.fuel -= refill;
+                console.log("jerrycan still has fuel: ", jerry.fuel);
+            }
+        }
+    }    
 }

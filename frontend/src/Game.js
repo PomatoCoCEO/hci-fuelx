@@ -6,6 +6,8 @@ class Game {
         this.canvas = this.container.querySelector('.game-canvas');
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
+        this.key = 2201289251509801; // generated randomly :)
+        this.cells = {};
     }
 
     gameLoop() {
@@ -22,13 +24,39 @@ class Game {
         })
 
         let camera = this.gameObjects.players[0];
+        this.drawTerrain()
 
         Object.values(this.gameObjects).forEach(objects => {
             for(let object of objects) {
-                console.log("hello there");
+                // console.log("hello there");
                 object.sprite.draw(this.ctx, camera);
             }
         });
+    }
+
+    drawTerrain() {
+        let camera = this.gameObjects.players[0];
+        for(let i = -4; i<=4; i++) {
+            for(let j = -4; j<=4; j++) {
+                let t = this.cells[[camera.x - camera.x % 64 + i*64, camera.y - camera.y % 64 + j*64 | 0]];
+                if(t){
+                    console.log(`Drawing known: ${i} ${j} color ${t.color()}`);
+                    t.sprite.draw(this.ctx, camera);
+                } 
+                else {
+                    t = new TerrainTile({
+                        src:undefined,
+                        x: (Math.floor(camera.x + i*64) | 0),
+                        y: (Math.floor(camera.y + j*64) | 0),
+                        game: this
+                    });
+                    t.fuelLevel; // calculates the fuel level right now
+                    this.cells[[t.x, t.y]] = t;
+                    console.log(`Drawing unknown: ${i} ${j} color: ${t.color()}`);
+                    t.sprite.draw(this.ctx, camera);
+                }
+            }
+        }
     }
     
 
@@ -91,6 +119,22 @@ class Game {
         this.gameObjects.players = this.gameObjects.players.filter(player => player.id !== playerId);
     }
 
+    initTerrain() {
+        let player = this.gameObjects.players[0];
+        for(let i = -4; i<=4; i++) {
+            for(let j = -3; j<=3; j++) {
+                let t = new TerrainTile({
+                    src:undefined,
+                    x: player.x - player.x%64 + i*64,
+                    y: player.y - player.y%64 + j*64,
+                    game: this
+                });
+                t.fuelLevel; // calculates the fuel level right now
+                this.cells[[t.x, t.y]] = t;
+            }
+        }
+    }
+
     async init() {
         this.homeScreen = new HomeScreen();
         await this.homeScreen.init(this.overlay);
@@ -106,6 +150,7 @@ class Game {
         this.healthBar.init();
         this.timeCounter = new TimeCounter(this.overlay);
         this.timeCounter.init();
+        
 
         this.gameObjects = {
             players: [
@@ -141,6 +186,7 @@ class Game {
                         game: this
                     }));
         }
+        this.initTerrain();
 
         new KeyPressListener("KeyV", () => this.gameObjects.players[0].update({
             action: 'drill'

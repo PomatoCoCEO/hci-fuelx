@@ -38,6 +38,7 @@ class Player extends GameObject {
 
     updateName(camera) {
         this.element.querySelector('.Character_name').innerHTML = (`${this.id}`).substring(0, 8);
+        
         const left = (this.x - camera.x) + (448/2) - 32 + "px";
         const top = (this.y - camera.y) - (320/2) - 50 + "px";
         this.element.style.transform = `translate3d(${left}, ${top}, 0)`;
@@ -62,7 +63,7 @@ class Player extends GameObject {
         this.direction = config.direction;
         this.action = config.action;
         if(behavior.type === 'walk') {
-            this.fuel --; // you also have to update the fuel in the player!
+            this.fuel --; // you also have to update the fuel in the
             this.game.healthBar.decrease(1);
             // TODO: Verify if next position is empty
             this.movingProgressRemaining = 32;
@@ -113,10 +114,11 @@ class Player extends GameObject {
     }
 
     commitToJerrycans() { // commits the fuel to jerrycans
-        let x = this.fuel / 2.0;
+        let x = Math.floor(this.fuel / 2.0);
         this.jerrycans += x;
         this.fuel -= x;
         this.game.healthBar.decrease(x);
+        this.element.querySelector('.Character_coins').innerHTML = this.jerrycans;
     }
 
     makeDrill() {
@@ -144,18 +146,13 @@ class Player extends GameObject {
             (jerrycan) => jerrycan.x == this.x && jerrycan.y == this.y);
         if(t != -1) {
             let jerry = this.game.gameObjects.jerrycans[t];
-            console.log("jerry fuel: ", jerry.fuel);
-            console.log("player fuel before:", this.fuel)
             let refill = Math.min(jerry.fuel, 100 - this.fuel);
             this.fuel += refill;
             this.game.healthBar.increase(refill);
-            console.log("total player fuel:", this.fuel);
             if(refill == jerry.fuel) { // fuel over: jerrycan going away
-                console.log("removing jerrycan")
                 this.game.gameObjects.jerrycans.splice(t, 1);
             } else { // fuel not over, jerry can be used again
                 jerry.fuel -= refill;
-                console.log("jerrycan still has fuel: ", jerry.fuel);
             }
         }
     }    

@@ -197,6 +197,10 @@ class Game {
             action: 'collect'
         }));
 
+        new KeyPressListener("KeyX", () => this.gameObjects.players[0].update({
+            action: 'commit-to-jerrycans'
+        }));
+
         this.startGameLoop();
     }
 

@@ -7,10 +7,12 @@ class Sprite {
             this.isLoaded = true;
         }
 
-        this.animations = config.animations;
+        this.animations = config.animations || {
+            'default': [ [0, 0] ],
+        };
 
         
-        this.currentAnimation = config.currentAnimation;
+        this.currentAnimation = config.currentAnimation || 'default';
         this.currentAnimationFrame = 0;
 
         this.animationFrameLimit = config.animationFrameLimit || 8;
@@ -19,22 +21,38 @@ class Sprite {
         this.animationFrameProgress = this.animationFrameLimit;
 
         this.gameObject = config.gameObject;
+        this.dim = config.dim || 32;
+        this.dim_final = config.dim_final || 64;
     }
 
     get frame() {
-        return [0,0];
+        return this.animations[this.currentAnimation][this.currentAnimationFrame];
+    }
+
+    updateAnimationProgress() {
+        if(this.animationFrameProgress > 0) {
+            this.animationFrameProgress--;
+            return;
+        }
+
+        this.animationFrameProgress = this.animationFrameLimit;
+        this.currentAnimationFrame = (this.currentAnimationFrame + 1) % 
+            this.animations[    
+                this.currentAnimation
+            ].length;
     }
 
     draw(ctx, camera) {
         const [x, y] = this.frame;
-        let dim = 32;
+        let dim = this.dim;
 
         this.isLoaded && ctx.drawImage(this.image,
                                        x * dim, y * dim,
                                        dim, dim,
                                        (this.gameObject.x - camera.x)+3*64, (this.gameObject.y - camera.y)+2*64,
-                                       128, 128
+                                       this.dim_final, this.dim_final
         );
+        this.updateAnimationProgress();
     }
 
 }

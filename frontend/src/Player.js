@@ -62,7 +62,7 @@ class Player extends GameObject {
         this.direction = config.direction;
         this.action = config.action;
         if(behavior.type === 'walk') {
-            this.game.healthBar.decrease();
+            this.game.healthBar.decrease(1);
             // TODO: Verify if next position is empty
             this.movingProgressRemaining = 32;
         }
@@ -101,14 +101,17 @@ class Player extends GameObject {
                     this.commitToJerrycans();
                 }
                 else if (config.action === 'drill') {
-                    if(this.game.isCellAvailable(this.x, this.y)) {
+                    if(this.fuel > 25 && this.game.isCellAvailable(this.x, this.y)) {
                         this.game.gameObjects.decorations.push(new Drill({
                             src: "static/images/drill.png",
                             x: this.x,
                             y: this.y,
                             game: this.game
-                        }));
+                        })); // we need a timer function in the drill so that it can be replaced by a jerrycan
+                        this.fuel -= 25; // removes 25 fuel after the drill is placed
+                        this.game.healthBar.decrease(25);
                     }
+                    
                 }
             }
         }

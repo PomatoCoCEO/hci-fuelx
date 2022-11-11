@@ -15,19 +15,15 @@ class PlayerSprite extends Sprite {
         };
 
         this.currentAnimation = config.currentAnimation || 'idle-down';
-        this.currentAnimationFrame = 0;
 
         this.animationFrameLimit = config.animationFrameLimit || 6;
+        this.animationFrameProgress = this.animationFrameLimit;
         // number of time frames per animation frame "time frames"
         // "https://en.wikipedia.org/wiki/Planck_units"
-        this.animationFrameProgress = this.animationFrameLimit;
-
-        this.gameObject = config.gameObject;
+        // DIM IS 32, FINAL DIM IS 64
     }
 
-    get frame() {
-        return this.animations[this.currentAnimation][this.currentAnimationFrame];
-    }
+    
 
     setAnimation(key) {
         if(this.currentAnimation !== key) {
@@ -37,31 +33,10 @@ class PlayerSprite extends Sprite {
         }
     }
 
-    updateAnimationProgress() {
-        if(this.animationFrameProgress > 0) {
-            this.animationFrameProgress--;
-            return;
-        }
-
-        this.animationFrameProgress = this.animationFrameLimit;
-        this.currentAnimationFrame = (this.currentAnimationFrame + 1) % this.animations[this.currentAnimation].length;
-    }
 
     draw(ctx, camera) {
-        const [x, y] = this.frame;
-
-        let dim = 32;
-
         this.gameObject.updateName(camera);
-
-        this.isLoaded && ctx.drawImage(this.image,
-                                       x * dim, y * dim,
-                                       dim, dim,
-                                       (this.gameObject.x - camera.x)+3*64, (this.gameObject.y - camera.y)+2*64,
-                                       64, 64
-        );
-
-        this.updateAnimationProgress();
+        super.draw(ctx, camera);
     }
 
 }

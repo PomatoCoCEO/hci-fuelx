@@ -25,6 +25,7 @@ class Game {
 
         Object.values(this.gameObjects).forEach(objects => {
             for(let object of objects) {
+                console.log("hello there");
                 object.sprite.draw(this.ctx, camera);
             }
         });
@@ -120,6 +121,7 @@ class Game {
         }
 
         for(let i = 0; i < 100; i++) {
+            console.log("ah");
             this.gameObjects.decorations.push(
                     new Cactus({
                         src: "static/images/cactus.png",
@@ -130,6 +132,7 @@ class Game {
         }
 
         for(let i = 0; i<5; i++) {
+            console.log("uh");
             this.gameObjects. decorations.push(
                     new Tumbleweed({
                         src: "static/images/tumbleweed.png",

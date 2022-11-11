@@ -21,15 +21,15 @@ class Drill extends GameObject {
 
     }
 
-    updateAnimationProgress() {
-        if(this.animationFrameProgress > 0) {
-            this.animationFrameProgress--;
-            return;
-        }
+    // updateAnimationProgress() {
+    //     if(this.animationFrameProgress > 0) {
+    //         this.animationFrameProgress--;
+    //         return;
+    //     }
 
-        this.animationFrameProgress = this.animationFrameLimit;
-        this.currentAnimationFrame = (this.currentAnimationFrame + 1) % this.animations[this.currentAnimation].length;
-    }
+    //     this.animationFrameProgress = this.animationFrameLimit;
+    //     this.currentAnimationFrame = (this.currentAnimationFrame + 1) % this.animations[this.currentAnimation].length;
+    // }
 
     get frame() {
         return this.animations[this.currentAnimation][this.currentAnimationFrame];

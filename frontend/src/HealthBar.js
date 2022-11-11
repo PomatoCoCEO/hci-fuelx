@@ -3,6 +3,7 @@ class HealthBar {
     constructor(container) {
         this.container = container;
         this.life = 100;
+
     }
 
     createElement() {
@@ -12,8 +13,8 @@ class HealthBar {
         this.element.setAttribute("max", 100);
     }
 
-    decrease() {
-        this.life--;
+    decrease(val) {
+        this.life-=val;
         this.element.setAttribute("value", this.life);
     }
 

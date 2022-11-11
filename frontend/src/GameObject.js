@@ -7,6 +7,7 @@ class GameObject {
             gameObject: this
         });
         this.game = config.game;
+        this.animations = config.animations || {"default": [[0, 0]]};
     }
 
     update() {

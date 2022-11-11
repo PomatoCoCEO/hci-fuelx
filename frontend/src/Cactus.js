@@ -3,9 +3,11 @@ class Cactus extends GameObject {
         super(config);
         this.sprite = new Sprite({
             src: "static/images/cactus.png",
-            gameObject: this
+            gameObject: this, 
+            dim: 16,
+            dim_final: 64
         });
-        console.log("cactus x: ",this.x);
+        // console.log("cactus x: ",this.x);
     }
 
     update() {}

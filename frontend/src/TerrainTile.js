@@ -28,6 +28,12 @@ class TerrainTile extends GameObject {
         // return this.fuelLevel;
     }
 
+    decreaseFuel(quant) {
+        let to_subtract = Math.min(quant, this.fl);
+        this.fl -= to_subtract ;
+        return to_subtract;
+    }
+
     color() {
         let f = this.fuelLevel;
         // colors defined in the gradient: light yellow

@@ -12,6 +12,33 @@ class DrillSprite extends Sprite {
         this.animationFrameProgress = this.animationFrameLimit;
 
         this.gameObject = config.gameObject;
+
+    }
+
+    updateAnimationProgress() {
+        if(this.animationFrameProgress > 0) {
+            this.animationFrameProgress--;
+            return;
+        }
+
+        this.animationFrameProgress = this.animationFrameLimit;
+        this.currentAnimationFrame = (this.currentAnimationFrame + 1) % 
+            this.animations[    
+                this.currentAnimation
+            ].length;
+        // this.tile.fuel -=1;
+        let recovered = this.gameObject.tile.decreaseFuel(1);
+        this.gameObject.totalFuel +=recovered;
+        if(recovered == 0 || this.gameObject.totalFuel >= 20) {
+            let index = this.gameObject.game.gameObjects.decorations.indexOf(this.gameObject);
+            this.gameObject.game.gameObjects.decorations.splice(index, 1);
+            this.gameObject.game.gameObjects.decorations.push(new Jerrycan({
+                x: this.gameObject.x,
+                y: this.gameObject.y,
+                game: this.gameObject.game,
+                totalFuel: this.gameObject.totalFuel
+            }));
+        }
     }
 
 

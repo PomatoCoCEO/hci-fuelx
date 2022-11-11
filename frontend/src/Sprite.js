@@ -1,10 +1,12 @@
 class Sprite {
 
     constructor(config) {
-        this.image = new Image();
-        this.image.src = config.src;
-        this.image.onload = () => {
-            this.isLoaded = true;
+        if(config.src) {
+            this.image = new Image();
+            this.image.src = config.src;
+            this.image.onload = () => {
+                this.isLoaded = true;
+            }
         }
 
         this.animations = config.animations || {

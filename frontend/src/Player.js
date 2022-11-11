@@ -120,11 +120,14 @@ class Player extends GameObject {
 
     makeDrill() {
         if(this.fuel > 25 && this.game.isCellAvailable(this.x, this.y)) {
+            let tile = this.game.cells[[this.x, this.y]];
+            console.log("tile:", tile);
             this.game.gameObjects.decorations.push(new Drill({
                 src: "static/images/drill.png",
                 x: this.x,
                 y: this.y,
-                game: this.game
+                game: this.game,
+                tile: tile
             })); // we need a timer function in the drill so that it can be replaced by a jerrycan
             this.fuel -= 25; // removes 25 fuel after the drill is placed
             this.game.healthBar.decrease(25);

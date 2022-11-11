@@ -40,7 +40,7 @@ class Game {
             for(let j = -4; j<=4; j++) {
                 let t = this.cells[[camera.x - camera.x % 64 + i*64, camera.y - camera.y % 64 + j*64 | 0]];
                 if(t){
-                    console.log(`Drawing known: ${i} ${j} color ${t.color()}`);
+                    // console.log(`Drawing known: ${i} ${j} color ${t.color()}`);
                     t.sprite.draw(this.ctx, camera);
                 } 
                 else {
@@ -52,7 +52,7 @@ class Game {
                     });
                     t.fuelLevel; // calculates the fuel level right now
                     this.cells[[t.x, t.y]] = t;
-                    console.log(`Drawing unknown: ${i} ${j} color: ${t.color()}`);
+                    // console.log(`Drawing unknown: ${i} ${j} color: ${t.color()}`);
                     t.sprite.draw(this.ctx, camera);
                 }
             }
@@ -162,7 +162,8 @@ class Game {
                     game: this
                 })
             ],
-            decorations: []
+            decorations: [],
+            
         }
 
         for(let i = 0; i < 100; i++) {

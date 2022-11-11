@@ -20,7 +20,6 @@ class Player extends GameObject {
             gameObject: this
         });
         this.drills = []; // for the drills in the user's inventory
-        this.healthBar = document.getElementById("health");
         this.pending = [];
         this.element = document.createElement('div');
         this.element.classList.add("Character", "grid-cell");
@@ -38,7 +37,7 @@ class Player extends GameObject {
     }
 
     updateName(camera) {
-        this.element.querySelector('.Character_name').innerHTML = this.id;
+        this.element.querySelector('.Character_name').innerHTML = (`${this.id}`).substring(0, 8);
         const left = (this.x - camera.x) + (448/2) - 32 + "px";
         const top = (this.y - camera.y) - (320/2) - 50 + "px";
         this.element.style.transform = `translate3d(${left}, ${top}, 0)`;
@@ -63,7 +62,7 @@ class Player extends GameObject {
         this.direction = config.direction;
         this.action = config.action;
         if(behavior.type === 'walk') {
-            this.healthBar.value--;
+            this.game.healthBar.decrease();
             // TODO: Verify if next position is empty
             this.movingProgressRemaining = 32;
         }
@@ -71,7 +70,6 @@ class Player extends GameObject {
 
     updatePending() {
         if(this.movingProgressRemaining == 0) {
-            console.log(this.pending.length);
             if(this.pending.length > 0) {
                 let p = this.pending.shift();
                 this.startBehaviour(p.config, {
@@ -104,16 +102,12 @@ class Player extends GameObject {
                 }
                 else if (config.action === 'drill') {
                     if(this.game.isCellAvailable(this.x, this.y)) {
-                        console.log("Pushing new drill....");
-                        this.drills.push(new Drill({
+                        this.game.gameObjects.decorations.push(new Drill({
                             src: "static/images/drill.png",
                             x: this.x,
                             y: this.y,
                             game: this.game
                         }));
-                    }
-                    else {
-                        console.log("Cell not available");
                     }
                 }
             }

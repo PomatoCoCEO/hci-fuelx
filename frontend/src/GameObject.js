@@ -9,4 +9,11 @@ class GameObject {
         this.game = config.game;
     }
 
+    update() {
+    }
+
+    updatePending() {
+
+    }
+
 }

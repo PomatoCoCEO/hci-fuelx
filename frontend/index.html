@@ -1,22 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FuelX</title>
-  <link rel="stylesheet" href="static/styles/main_menu.css">
-  <link rel="icon" href="static/images/logo.png">
-  <link href="https://fonts.cdnfonts.com/css/common-pixel" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FuelX</title>
+    <link rel="stylesheet" href="static/styles/index.css">
+    <link rel="icon" href="static/images/logo.png">
+    <link href="https://fonts.cdnfonts.com/css/common-pixel" rel="stylesheet">
 </head>
 
 <body>
-  <div class="container" id="menu">
-    <h1 id="title">FuelX</h1>
-    <a href="rooms.html" style="text-decoration: none;">
-      <div class="pixel2">Join Room</div>
-    </a>
-    <div class="pixel2">Create Room</div>
-  </div>
+    <div class="game-container">
+        <canvas class="game-canvas" width="448" height="320"></canvas>
+        <div class="overlay"></div>
+    </div>
+    <script src="https://cdn.socket.io/4.5.3/socket.io.min.js"
+        integrity="sha384-WPFUvHkB1aHA5TDSZi6xtDgkF0wXJcIIxXhC6h8OT8EH3fC5PWro5pWJ1THjcfEi"
+        crossorigin="anonymous"></script>
+
+    <script src="src/TimeCounter.js"></script>
+    <script src="src/KeyPressListener.js"></script>
+    <script src="src/HomeScreen.js"></script>
+    <script src="src/KeyboardMenu.js"></script>
+    <script src="src/HealthBar.js"></script>
+
+    <script src="src/SocketHandler.js"></script>
+
+    <script src="src/DirectionInput.js"></script>
+
+    <script src="src/GameObject.js"></script>
+    <script src="src/Sprite.js"></script>
+    <script src="src/PlayerSprite.js"></script>
+    <script src="src/TumbleweedSprite.js"></script>
+    <script src="src/DrillSprite.js"></script>
+    <script src="src/Tumbleweed.js"></script>
+    <script src="src/Drill.js"></script>
+    <script src="src/Player.js"></script>
+    <script src="src/Cactus.js"></script>
+
+    <script src="src/Game.js"></script>
+    <script src="src/init.js"></script>
+
 </body>
 
-<body>
+</html>

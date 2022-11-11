@@ -20,6 +20,14 @@ body {
     transform: scale(2) translateY(40%);
 }
 
+.overlay {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
 .game-container canvas {
     image-rendering: pixelated;
 }
@@ -97,11 +105,43 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    color: red;
-    margin-top: 0px;
     color: white;
-    position: absolute;
-    left: 50%;
-    top: 0%;
+    width: 50%;
+    text-align: center;
+    margin: auto;
     font-family: 'Common Pixel', sans-serif;                             
+}
+
+.HomeScreen {
+  width: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 40px;
+  color: orange;
+  height: auto;
+  font-family: 'Common Pixel', sans-serif;
+}
+
+.DescriptionBox p {
+  font-size: 10px;
+  color: black;
+  height: auto;
+  font-family: 'Common Pixel', sans-serif;
+}
+
+.HomeScreen button {
+  padding: 5px 5px;
+  position: relative;
+  background: green;
+  width: 50%;
+  margin: auto;
+  margin-top: 10%;
+  text-transform: uppercase;
+  border: none;
+  color: white;
+  font-family: 'Common Pixel', sans-serif;
+  outline: 0;
 }

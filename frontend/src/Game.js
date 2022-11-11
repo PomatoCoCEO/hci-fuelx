@@ -1,38 +1,21 @@
 class Game {
 
     constructor(config) {
-        this.timer = document.getElementById("timer");
-        this.begin_time = new Date().getTime();
         this.container = config.container;
+        this.overlay = config.overlay;
         this.canvas = this.container.querySelector('.game-canvas');
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
     }
 
-    updateTimer() {
-        var now = new Date().getTime();
-
-        var dif = this.begin_time - now;
-
-        var minutes = Math.floor((dif % (1000 * 60 * 60)) / (1000 * 60))+10;
-        var seconds = Math.floor((dif % (1000 * 60)) / 1000)+60;
-
-        if(seconds < 10) {
-            this.timer.innerHTML = minutes.toString() + ":0" + seconds.toString();
-        }else {
-            this.timer.innerHTML = minutes.toString() + ":" + seconds.toString();
-        }
-    }
-
     gameLoop() {
-        this.updateTimer();
+        this.timeCounter.update();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         Object.values(this.gameObjects).forEach(objects => {
             for(let object of objects) {
                 object.update({
-                    direction: this.directionInput.direction,
-                    action: this.actionInput.action
+                    direction: this.directionInput.direction
                 });
                 object.updatePending();
             }
@@ -49,17 +32,7 @@ class Game {
     
 
     isCellAvailable(x, y) {
-        if (this.gameObjects.some(object => {
-            return (!(object instanceof Player) && object.x ===x && object.y === y);
-        })) return false;
-        else {
-            for(const element of this.players) {
-                for(const drill of element.drills) {
-                    if (drill.x === x && drill.y === y) return false;
-                }
-            }
-            return true;
-        }
+        return true;
     }
 
     startGameLoop() {
@@ -75,12 +48,9 @@ class Game {
     }
 
     movePlayer({ playerId, direction }) {
-        console.log(playerId, direction)
         if(playerId === this.socketHandler.socket.id)
             return;
-        console.log(this.gameObjects);
         const index = this.playerIndex(playerId);
-        console.log('MOVE: ', playerId, direction, index);
         this.gameObjects.players[index].forceUpdate({
             direction
         });
@@ -118,18 +88,23 @@ class Game {
             this.gameObjects.players[index].element.remove();
         }
         this.gameObjects.players = this.gameObjects.players.filter(player => player.id !== playerId);
-        console.log(this.gameObjects.players);
     }
 
-    init() {
+    async init() {
+        this.homeScreen = new HomeScreen();
+        await this.homeScreen.init(this.overlay);
+        
         this.directionInput = new DirectionInput();
         this.directionInput.init();
-        this.actionInput = new ActionInput();
-        this.actionInput.init();
         this.socketHandler = new SocketHandler({
             connectString: "ws://localhost:4000",
             game: this
         });
+        
+        this.healthBar = new HealthBar(this.overlay);
+        this.healthBar.init();
+        this.timeCounter = new TimeCounter(this.overlay);
+        this.timeCounter.init();
 
         this.gameObjects = {
             players: [
@@ -143,6 +118,10 @@ class Game {
             ],
             decorations: []
         }
+
+        new KeyPressListener("KeyV", () => this.gameObjects.players[0].update({
+            action: 'drill'
+        }));
 
         this.startGameLoop();
     }

@@ -6,7 +6,6 @@ class SocketHandler {
     }
 
     movePlayer(direction) {
-        console.log('Move?');
         this.socket.emit('move-player', {
             playerId: this.socket.id,
             direction

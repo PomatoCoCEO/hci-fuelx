@@ -1,10 +1,12 @@
 export default class Player {
-    constructor(id, name, x, y, direction) {
-        this.id = id;
-        this.name = name;
-        this.x = x;
-        this.y = y;
-        this.direction = direction;
+    constructor(config) {
+        this.id = config.id;
+        this.name = config.name;
+        this.x = config.x;
+        this.y = config.y;
+        this.direction = config.direction;
+        this.observers = config.game.observers;
+        this.notifyAll = config.game.notifyAll;
         this.fuel = 100;
         this.jerrycans = 0;
 
@@ -16,12 +18,37 @@ export default class Player {
         }
     }
 
+    get shortId() {
+        return (`${this.id}`).substring(0, 9);
+    }
+
     move(direction) {
         if(!this.directionUpdate[direction])
             return;
         const [property, change] = this.directionUpdate[direction];
         this[property] += change;
-        this.fuel--;
+        this.updateFuel(this.fuel - 1);
+    }
+
+    updateFuel(fuel) {
+        this.fuel = fuel;
+        this.notifyAll({
+            type: 'fuel-update',
+            args: {
+                playerId: this.id,
+                fuel: this.fuel
+            }
+        });
+        if(this.fuel <= 0) {
+            this.notifyAll({
+                type: 'notification',
+                args: {
+                    type: 'error',
+                    title: 'DEAD',
+                    description: `${this.shortId} died.`
+                }
+            });
+        }
     }
 
 }

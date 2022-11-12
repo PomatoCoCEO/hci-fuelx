@@ -57,6 +57,10 @@ class SocketHandler {
             this.socket.on('collect', (command) => {
                 this.map.removeDrill(command.args);
             });
+
+            this.socket.on('notification', (command) => {
+                this.map.game.addNotification(command.args);
+            });
         });
     }
 

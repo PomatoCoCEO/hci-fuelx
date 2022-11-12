@@ -15,7 +15,7 @@ export default class Cell {
     collect(player) {
         const diff = (Date.now() - this.start) / 1000;
         const progress = Math.min(1, diff / this.drillTime);
-        player.fuel = Math.min(100, player.fuel + this.maxFuel * progress);
+        player.updateFuel(Math.min(100, player.fuel + this.maxFuel * progress));
         this.progress = 0;
         this.occupied = false;
     }

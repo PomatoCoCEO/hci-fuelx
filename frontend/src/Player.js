@@ -40,7 +40,7 @@ class Player extends GameObject {
     }
 
     updateName(camera) {
-        this.element.querySelector('.Character_name').innerHTML = (`${this.id}`).substring(0, 8);
+        this.element.querySelector('.Character_name').innerHTML = (`${this.id}`).substring(0, 9);
         
         const left = (this.x - camera.x) + (448/2) - 32 + "px";
         const top = (this.y - camera.y) - (320/2) - 50 + "px";

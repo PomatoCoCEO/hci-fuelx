@@ -13,6 +13,7 @@ class NetworkPlayers {
     }
 
     addPlayer(player) {
+        console.log(player);
         if(!this.map.gameObjects.players[player.id]) {
             this.map.gameObjects.players[player.id] = new Player({
                 id: player.id,

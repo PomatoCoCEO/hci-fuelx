@@ -3,6 +3,7 @@ class Game {
     constructor(config) {
         this.container = config.container;
         this.overlay = config.overlay;
+        this.notifications = config.notifications;
         this.canvas = this.container.querySelector('.game-canvas');
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
@@ -26,6 +27,15 @@ class Game {
         frame();
     }
 
+    addNotification(config) {
+        new Notification({
+            overlay: this.notifications,
+            type: config.type,
+            title: config.title,
+            description: config.description
+        }).createElement();
+    }
+
     async init() {
         this.map = new Map(this);
         this.map.init();
@@ -34,7 +44,7 @@ class Game {
         await this.homeScreen.init(this.overlay);
         
         this.socketHandler = new SocketHandler({
-            connectString: "ws://atomicbits.pt:8080",
+            connectString: "ws://localhost:8080",
             map: this.map,
             game: this
         });

@@ -2,7 +2,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import Game from './Game.js';
 
-const SERVER_PORT = 4000;
+const SERVER_PORT = 8080;
 const httpServer = createServer();
 const io = new Server(httpServer, {
     cors: {

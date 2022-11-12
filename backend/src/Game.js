@@ -12,13 +12,18 @@ export default class Game {
     }
 
     instantiatePlayer(playerId) {
-        this.players[playerId] = new Player(
-            playerId,
-            'Name...',
-            0,
-            0,
-            'down'
-        );
+        this.players[playerId] = new Player({
+            id: playerId,
+            name: 'Name...',
+            x: 0,
+            y: 0,
+            direction: 'down',
+            game: this
+        });
+    }
+
+    shortId(playerId) {
+        return (`${playerId}`).substring(0, 9);
     }
 
     subscribe(observerFunction) {
@@ -36,6 +41,14 @@ export default class Game {
             type: 'disconnect-player',
             args: playerId
         });
+        this.notifyAll({
+            type: 'notification',
+            args: {
+                type: 'error',
+                title: 'PLAYER',
+                description: `${this.shortId(playerId)} left the game.`
+            }
+        });
     }
 
     connectPlayer(playerId) {
@@ -46,6 +59,14 @@ export default class Game {
             args: {
                 players: Object.values(this.players),
                 drills: Object.values(this.cells)
+            }
+        });
+        this.notifyAll({
+            type: 'notification',
+            args: {
+                type: 'success',
+                title: 'PLAYER',
+                description: `${this.shortId(playerId)} joined the game.`
             }
         });
     }
@@ -62,14 +83,6 @@ export default class Game {
             args: {
                 playerId,
                 direction
-            }
-        });
-
-        this.notifyAll({
-            type: 'fuel-update',
-            args: {
-                playerId,
-                fuel: player.fuel
             }
         });
     }
@@ -95,7 +108,7 @@ export default class Game {
 
         const pos = utils.position(player.x, player.y);
         if(this.isCellFree(pos) && player.fuel >= this.drillCost) {
-            player.fuel -= this.drillCost;
+            player.updateFuel(player.fuel - this.drillCost);
             this.placeDrill(player.x, player.y);
             this.notifyAll({
                 type: 'drill',
@@ -104,14 +117,6 @@ export default class Game {
                     x: player.x,
                     y: player.y,
                     start: Date.now()
-                }
-            });
-    
-            this.notifyAll({
-                type: 'fuel-update',
-                args: {
-                    playerId,
-                    fuel: player.fuel
                 }
             });
         }
@@ -132,14 +137,6 @@ export default class Game {
                     playerId,
                     x: player.x,
                     y: player.y
-                }
-            });
-    
-            this.notifyAll({
-                type: 'fuel-update',
-                args: {
-                    playerId,
-                    fuel: player.fuel
                 }
             });
 

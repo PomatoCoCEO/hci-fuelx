@@ -118,7 +118,7 @@ body {
   text-align: center;
 }
 
-.title {
+.HomeScreen .title {
   font-size: 40px;
   color: orange;
   height: auto;
@@ -144,4 +144,40 @@ body {
   color: white;
   font-family: 'Common Pixel', sans-serif;
   outline: 0;
+}
+
+.notifications {
+  margin-top: 10%;
+  position: absolute;
+  right: 0;
+}
+
+.notification {
+  font-size: 10px;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 3px;
+  background: #333;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-family: 'Common Pixel', sans-serif;
+}
+
+.notification.success .title {
+  color: green;
+}
+
+.notification.error .title {
+  color: red;
+}
+
+.notification.info .title {
+  color: blue;
+}
+
+.notification .description {
+  color: #fff;
+  font-size: 8px;
 }

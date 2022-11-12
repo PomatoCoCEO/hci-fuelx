@@ -7,18 +7,71 @@ class TerrainTile extends GameObject {
         });
         this.fl = -1;
         this.max_fl = -1;
+        this._val_hash = this.val_hash;
+        this._hasCactus = -1;
+        this._hasCactus = this.hasCactus;
+
+        this._hasTumbleweed = -1;
+        this._hasTumbleweed = this.hasTumbleweed;
+        console.log(`${this.x} ${this.y} ${this._val_hash} ${this._val_hash % 16} ${this._val_hash % 64} ${this._hasTumbleweed}`);
+        if(this.hasCactus) {
+            this.cactus = new Cactus({
+                x: this.x,
+                y: this.y,
+                gameObject: this
+            });
+        }
+        if(this.hasTumbleweed) {
+            this.tumbleweed = new Tumbleweed({
+                x: this.x,
+                y: this.y,
+                gameObject: this
+            });
+        }
         // this.fuelLevel = config.fuelLevel || 0;
         // this.hasDrill = false;
+    }
+
+    get val_hash() {
+        let key = this.game.key;
+        let pos_str = pos_to_string(Math.floor(this.x), Math.floor(this.y));
+        let hash = pos_str.hashCode();
+        let val = (hash ^ key);
+        if(val < 0) val = -val;
+        return val;
+    }
+
+    get hasTumbleweed () {
+        if(this._hasTumbleweed != -1) return this._hasTumbleweed == 1;
+        let val = this.val_hash;
+        let val_mod = val % 32;
+        if(val_mod == 1) {
+            this._hasTumbleweed = 1;
+            return true;
+        }
+        this._hasTumbleweed = 0;
+        return false;
+    }
+
+    get hasCactus () {
+        if(this._hasCactus != -1)
+            return this._hasCactus!=0;
+        let v = this.val_hash;
+        if(v % 16 == 15) {
+            this._hasCactus = 1;
+            return true;
+        }
+        else {
+            this._hasCactus = 0;
+            return false;
+        }
     }
 
     get fuelLevel() {
         if(this.fl != -1)
             return this.fl;
         // if this.game.hasCached(this.x, this.y) return this.game.getCached(this.x, this.y);
-        let key = this.game.key;
-        let pos_str = pos_to_string(Math.floor(this.x), Math.floor(this.y));
-        let hash = pos_str.hashCode();
-        let val = (hash ^ key);
+        let val = this.val_hash;
         if (val % 4 == 0) {
             this.fl = (val % 400) /4;
             if(this.fl < 0) this.fl = -this.fl;

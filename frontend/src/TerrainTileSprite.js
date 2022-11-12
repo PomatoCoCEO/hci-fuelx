@@ -14,6 +14,12 @@ class TerrainTileSprite extends Sprite {
         ctx.fillStyle = color;
         ctx.fillRect(lower_x+3*64, lower_y+2*64, 64, 64);
         this.updateAnimationProgress();
+        if(this.gameObject.hasCactus) {
+            this.gameObject.cactus.sprite.draw(ctx, camera);
+        }
+        if(this.gameObject.hasTumbleweed) {
+            this.gameObject.tumbleweed.sprite.draw(ctx, camera);
+        }
         // this.element.style.backgroundColor = color;
     }
 

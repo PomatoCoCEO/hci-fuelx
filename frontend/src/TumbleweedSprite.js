@@ -20,4 +20,9 @@ class TumbleweedSprite extends Sprite {
     get frame() {
         return this.animations[this.currentAnimation][this.currentAnimationFrame];
     }
+
+    draw(ctx, camera) {
+        super.draw(ctx, camera);
+        this.gameObject.update();
+    }
 }

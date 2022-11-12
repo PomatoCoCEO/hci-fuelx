@@ -166,27 +166,27 @@ class Game {
             jerrycans: []
         }
 
-        for(let i = 0; i < 100; i++) {
-            console.log("ah");
-            this.gameObjects.decorations.push(
-                    new Cactus({
-                        src: "static/images/cactus.png",
-                        x: (i < 50 ? -1 : 1) * Math.floor(10*Math.random())*64,
-                        y: (i < 50 ? -1 : 1) * Math.floor(10*Math.random())*64,
-                        game: this
-                    }));
-        }
+        // for(let i = 0; i < 100; i++) {
+        //     console.log("ah");
+        //     this.gameObjects.decorations.push(
+        //             new Cactus({
+        //                 src: "static/images/cactus.png",
+        //                 x: (i < 50 ? -1 : 1) * Math.floor(10*Math.random())*64,
+        //                 y: (i < 50 ? -1 : 1) * Math.floor(10*Math.random())*64,
+        //                 game: this
+        //             }));
+        // }
 
-        for(let i = 0; i<5; i++) {
-            console.log("uh");
-            this.gameObjects. decorations.push(
-                    new Tumbleweed({
-                        src: "static/images/tumbleweed.png",
-                        x: Math.floor(10*Math.random())*64,
-                        y: Math.floor(10*Math.random())*64,
-                        game: this
-                    }));
-        }
+        // for(let i = 0; i<5; i++) {
+        //     console.log("uh");
+        //     this.gameObjects. decorations.push(
+        //             new Tumbleweed({
+        //                 src: "static/images/tumbleweed.png",
+        //                 x: Math.floor(10*Math.random())*64,
+        //                 y: Math.floor(10*Math.random())*64,
+        //                 game: this
+        //             }));
+        // }
         this.initTerrain();
 
         new KeyPressListener("KeyV", () => this.gameObjects.players[0].update({

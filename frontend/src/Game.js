@@ -34,7 +34,7 @@ class Game {
         await this.homeScreen.init(this.overlay);
         
         this.socketHandler = new SocketHandler({
-            connectString: "ws://localhost:4000",
+            connectString: "ws://atomicbits.pt:8080",
             map: this.map,
             game: this
         });

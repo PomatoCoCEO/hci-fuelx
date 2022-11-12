@@ -6,6 +6,7 @@ class TerrainTile extends GameObject {
             gameObject: this
         });
         this.fl = -1;
+        this.max_fl = -1;
         // this.fuelLevel = config.fuelLevel || 0;
         // this.hasDrill = false;
     }
@@ -21,9 +22,11 @@ class TerrainTile extends GameObject {
         if (val % 4 == 0) {
             this.fl = (val % 400) /4;
             if(this.fl < 0) this.fl = -this.fl;
+            this.max_fl = this.fl;
             return this.fl;
         }
         this.fl = 0;
+        this.max_fl = 0;
         return this.fl;
         // return this.fuelLevel;
     }
@@ -32,6 +35,12 @@ class TerrainTile extends GameObject {
         let to_subtract = Math.min(quant, this.fl);
         this.fl -= to_subtract ;
         return to_subtract;
+    }
+
+    regenerate() {
+        let reg_quant = Math.min(1, this.max_fl - this.fl);
+        this.fl += reg_quant;
+        return reg_quant;
     }
 
     color() {

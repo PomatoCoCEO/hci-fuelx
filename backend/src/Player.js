@@ -7,7 +7,6 @@ export default class Player {
         this.direction = direction;
         this.fuel = 100;
         this.jerrycans = 0;
-        this.health = 100;
 
         this.directionUpdate = {
             'up': ['y', -64],
@@ -22,6 +21,7 @@ export default class Player {
             return;
         const [property, change] = this.directionUpdate[direction];
         this[property] += change;
+        this.fuel--;
     }
 
 }

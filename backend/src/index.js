@@ -28,6 +28,14 @@ io.on('connection', (socket) => {
     socket.on('move-player', (command) => {
         game.movePlayer(command);
     });
+
+    socket.on('drill', (command) => {
+        game.drill(command);
+    });
+
+    socket.on('collect', (command) => {
+        game.collect(command);
+    });
 });
 
 httpServer.listen(SERVER_PORT, () => {

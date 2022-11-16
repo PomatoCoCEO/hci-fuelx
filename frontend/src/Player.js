@@ -32,7 +32,7 @@ class Player extends GameObject {
                 </div>
             <div class="Character_you-arrow"></div>
         `);
-        this.game.container.appendChild(this.element);
+        this.game.overlay .appendChild(this.element);
     }
 
     clean() {
@@ -43,7 +43,7 @@ class Player extends GameObject {
         this.element.querySelector('.Character_name').innerHTML = (`${this.id}`).substring(0, 9);
         
         const left = (this.x - camera.x) + (448/2) - 32 + "px";
-        const top = (this.y - camera.y) - (320/2) - 50 + "px";
+        const top = (this.y - camera.y) + (320/2) - 60 + "px";
         this.element.style.transform = `translate3d(${left}, ${top}, 0)`;
     }
 

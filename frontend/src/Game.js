@@ -58,6 +58,26 @@ class Game {
         this.healthBar.init();
         this.timeCounter = new TimeCounter(this.overlay);
         this.timeCounter.init();
+        this.actionMenu = new ActionMenu({
+            overlay: this.overlay,
+            options: [
+                {
+                    class: 'collect_button',
+                    handler: () => this.socketHandler.collect()
+                },
+                {
+                    class: 'drill_button',
+                    handler: () => this.socketHandler.drill()
+                },
+                {
+                    class: 'trade_button',
+                    handler: () => {
+                        console.log('trade');
+                    }
+                }
+            ]
+        });
+        this.actionMenu.init();
 
 
         new KeyPressListener("KeyV", () => this.socketHandler.drill());

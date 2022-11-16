@@ -1,16 +1,16 @@
-class ActionMenu {
+class MovementMenu {
 
     constructor(config) {
         this.overlay = config.overlay;
         this.options = config.options;
-        this.radius = 230;
+        this.radius = 75;
     }
 
     setOptions() {
         this.element.innerHTML = this.options.map((option, index) => {
             return (`
                 <div class="option">
-                    <button data-button="${index}" class="action-button ${option.class}">
+                    <button data-button="${index}" class="move-button ${option.class}">
                     </button>
                 </div>
             `);
@@ -22,17 +22,12 @@ class ActionMenu {
                 const chosenOption = this.options[index];
                 chosenOption.handler();
             });
-            
-            const offsetX = this.radius * Math.sin(Math.PI/2/(this.options.length-1) * index);
-            const offsetY = this.radius * Math.cos(Math.PI/2/(this.options.length-1) * index);
-            let str = `translate(-${Math.round(offsetX)}px,-${Math.round(offsetY)}px)`;
-            button.style.transform = str;
         });
     }
 
     createElement() {
         this.element = document.createElement('div');
-        this.element.classList.add('action-menu');
+        this.element.classList.add('move-menu');
     }
 
     close() {

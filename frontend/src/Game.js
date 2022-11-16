@@ -6,6 +6,8 @@ class Game {
         this.notifications = config.notifications;
         this.canvas = this.container.querySelector('.game-canvas');
         this.ctx = this.canvas.getContext('2d');
+        this.ctx.canvas.style.width  = `${window.innerWidth}px`;
+        this.ctx.canvas.style.height = `${window.innerWidth*3/4}px`;
         this.ctx.imageSmoothingEnabled = false;
     }
 
@@ -78,6 +80,37 @@ class Game {
             ]
         });
         this.actionMenu.init();
+
+        this.moveMenu = new MovementMenu({
+            overlay: this.overlay,
+            options: [
+                {
+                    class: 'move-up',
+                    handler: () => this.map.camera.update({
+                        direction: 'up'
+                    })
+                },
+                {
+                    class: 'move-down',
+                    handler: () => this.map.camera.update({
+                        direction: 'down'
+                    })
+                },
+                {
+                    class: 'move-left',
+                    handler: () => this.map.camera.update({
+                        direction: 'left'
+                    })
+                },
+                {
+                    class: 'move-right',
+                    handler: () => this.map.camera.update({
+                        direction: 'right'
+                    })
+                }
+            ]
+        });
+        this.moveMenu.init();
 
 
         new KeyPressListener("KeyV", () => this.socketHandler.drill());

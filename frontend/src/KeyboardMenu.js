@@ -32,7 +32,6 @@ class KeyboardMenu {
         })
         button.addEventListener("focus", () => {
           this.prevFocus = button;
-          this.descriptionElementText.innerText = button.dataset.description;
         })
       })
   
@@ -48,23 +47,16 @@ class KeyboardMenu {
     createElement() {
       this.element = document.createElement("div");
       this.element.classList.add("KeyboardMenu");
-
-      this.descriptionElement = document.createElement("div");
-      this.descriptionElement.classList.add("DescriptionBox");
-      this.descriptionElement.innerHTML = (`<p>I will provide information!</p>`);
-      this.descriptionElementText = this.descriptionElement.querySelector("p");
     }
   
     end() {
       this.element.remove();
-      this.descriptionElement.remove();
       this.up.unbind();
       this.down.unbind();
     }
   
     init(container) {
       this.createElement();
-      (this.descriptionContainer || container).appendChild(this.descriptionElement);
       container.appendChild(this.element);
   
       this.up = new KeyPressListener("ArrowUp", () => {

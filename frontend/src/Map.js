@@ -21,7 +21,7 @@ class Map {
                     if(object.children) {
                         Object.values(object.children).forEach(child => {
                             child.update();
-                        })
+                        });
                     }
                     object.update({
                         direction: this.game.directionInput.direction
@@ -35,7 +35,7 @@ class Map {
                     if(object.children) {
                         Object.values(object.children).forEach(child => {
                             child.sprite.draw(this.game.ctx, this.camera);
-                        })
+                        });
                     }
                     object.sprite.draw(this.game.ctx, this.camera);
                 });

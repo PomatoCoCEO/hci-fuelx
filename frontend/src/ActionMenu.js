@@ -3,7 +3,7 @@ class ActionMenu {
     constructor(config) {
         this.overlay = config.overlay;
         this.options = config.options;
-        this.radius = 230;
+        this.radius = 40;
     }
 
     setOptions() {
@@ -25,7 +25,7 @@ class ActionMenu {
             
             const offsetX = this.radius * Math.sin(Math.PI/2/(this.options.length-1) * index);
             const offsetY = this.radius * Math.cos(Math.PI/2/(this.options.length-1) * index);
-            let str = `translate(-${Math.round(offsetX)}px,-${Math.round(offsetY)}px)`;
+            let str = `translate(-${Math.round(offsetX)}vh,-${Math.round(offsetY)}vh)`;
             button.style.transform = str;
         });
     }

@@ -6,9 +6,20 @@ class Game {
         this.notifications = config.notifications;
         this.canvas = this.container.querySelector('.game-canvas');
         this.ctx = this.canvas.getContext('2d');
+
         this.ctx.canvas.style.width  = `${window.innerWidth}px`;
         this.ctx.canvas.style.height = `${window.innerWidth*3/4}px`;
         this.ctx.imageSmoothingEnabled = false;
+    }
+
+    setFullScreen() {
+        if (this.container.requestFullscreen) {
+            this.container.requestFullscreen();
+        } else if (this.container.webkitRequestFullscreen) { /* Safari */
+            this.container.webkitRequestFullscreen();
+        } else if (this.container.msRequestFullscreen) { /* IE11 */
+            this.container.msRequestFullscreen();
+        }
     }
 
     gameLoop() {
@@ -42,11 +53,11 @@ class Game {
         this.map = new Map(this);
         this.map.init();
 
-        this.homeScreen = new HomeScreen();
+        this.homeScreen = new HomeScreen(this);
         await this.homeScreen.init(this.overlay);
         
         this.socketHandler = new SocketHandler({
-            connectString: "ws://localhost:8080",
+            connectString: "ws://atomicbits.pt:8080",
             map: this.map,
             game: this
         });

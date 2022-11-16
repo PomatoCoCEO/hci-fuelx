@@ -41,9 +41,10 @@ class Player extends GameObject {
 
     updateName(camera) {
         this.element.querySelector('.Character_name').innerHTML = (`${this.id}`).substring(0, 9);
-        const left = (this.x - camera.x) * (window.innerWidth/this.game.canvas.width) - 32 + "px";
-        const top = (this.y - camera.y) * (window.innerHeight/this.game.canvas.height) - 150 + "px";
-        this.element.style.transform = `translate3d(${left}, ${top}, 0)`;
+        console.log('A:', this.game.container.clientHeight, 'B:', window.innerHeight);
+        const left = (this.x - camera.x) * (this.game.container.offsetWidth / this.game.canvas.width);
+        const top = (this.y - camera.y) * (this.game.container.offsetWidth*3/4 / this.game.canvas.height);
+        this.element.style.transform = `translate3d(${left}px, ${top}px, 0)`;
     }
 
     updatePosition() {

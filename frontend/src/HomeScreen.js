@@ -1,7 +1,7 @@
 class HomeScreen {
 
-    constructor() {
-
+    constructor(game) {
+        this.game = game;
     }
 
     getOptions(resolve) {
@@ -10,6 +10,7 @@ class HomeScreen {
                 label: "Join Room",
                 description: "Join a public or private room",
                 handler: () => {
+                    this.game.setFullScreen();
                     this.close();
                     resolve();
                 }

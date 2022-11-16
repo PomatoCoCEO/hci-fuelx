@@ -3,13 +3,13 @@
 }
 
 body {
-    background-color: #fce899;
     padding: 0;
     margin: 0;
     overflow: hidden;
 }
 
 .game-container {
+  background-color: #fce899;
   display: flex;
   position: absolute;
   width: 100%;
@@ -18,10 +18,6 @@ body {
   outline: 1px solid #fff;
   align-items: center;
   justify-content: center;
-}
-
-.canvas {
-
 }
 
 .overlay {
@@ -69,9 +65,9 @@ body {
 
   .Character_name-container {
     position: absolute;
-    top: -12px;
-    left: -80px;
-    font-size: 30px;
+    top: -20vh;
+    left: -8vw;
+    font-size: 2vw;
     padding: 5px;
     border-radius: 3px;
     background: #333;
@@ -104,7 +100,7 @@ body {
   top: 0;
   text-align: center;
   margin: auto;
-  font-size: 80px;
+  font-size: 8vw;
   font-family: 'Common Pixel', sans-serif;                             
 }
 
@@ -115,14 +111,14 @@ body {
 
 .HomeScreen .title {
   margin: 0;
-  font-size: 130px;
+  font-size: 10vh;
   color: orange;
   height: auto;
   font-family: 'Common Pixel', sans-serif;
 }
 
 .HomeScreen button {
-  padding: 30px 30px;
+  padding: 4%;
   position: relative;
   background: green;
   margin: auto;
@@ -130,15 +126,16 @@ body {
   text-transform: uppercase;
   border: none;
   color: white;
-  font-size: 50px;
+  font-size: 6vh;
   font-family: 'Common Pixel', sans-serif;
   outline: 0;
 }
 
 .notifications {
-  top: 100px;
+  top: 8vh;
   position: absolute;
   right: 0;
+  z-index: 1;
 }
 
 .notification {
@@ -181,14 +178,14 @@ body {
 
 .action-button {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 15vh;
+  height: 15vh;
   border: 5px solid black;
   border-radius: 50%;
   image-rendering: pixelated;
   background: none;
   background-position: center;
-  background-size: 100px;
+  background-size: 15vh;
   image-rendering: pixelated;
   margin: 10px;
   bottom: 0;
@@ -211,37 +208,37 @@ body {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 300px;
-  height: 300px;
+  width: 40vh;
+  height: 40vh;
   margin: 20px;
 }
 
 .move-button {
   position: absolute;
-  width: 64px;
-  height: 64px;
+  width: 15vh;
+  height: 15vh;
   image-rendering: pixelated;
   border: none;
   background: none;
   background-position: center;
-  background-size: 256px;
+  background-size:30vh;
   background-image: url('../images/triangle.png');
 }
 
 .move-left {
-  transform: translateY(118px) rotate(-90deg);
+  transform: translateY(15vh) rotate(-90deg);
 }
 
 .move-right {
-  transform: translateY(118px) translateX(236px) rotate(90deg);
+  transform: translateY(15vh) translateX(30vh) rotate(90deg);
 }
 
 .move-up {
-  transform: translateX(118px) rotate(0deg);
+  transform: translateX(15vh) rotate(0deg);
 }
 
 .move-down {
-  transform: translateX(118px) translateY(236px) rotate(180deg);
+  transform: translateX(15vh) translateY(30vh) rotate(180deg);
 }
 
 

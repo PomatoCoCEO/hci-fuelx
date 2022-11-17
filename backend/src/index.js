@@ -11,8 +11,15 @@ const io = new Server(httpServer, {
     }
 });
 
+function notify(socket, command) {
+    console.log(`PRIVATE | ${(new Date()).toUTCString()} | ID: ${socket.id} | TYPE: ${command.type}`);
+    socket.emit(command.type, command);
+}
+
 let game = new Game();
-let room = new Room();
+let room = new Room(notify);
+
+
 game.subscribe((command) => {
     console.log(`GAME-BROADCAST | ${(new Date()).toUTCString()} | TYPE: ${command.type}`);
     io.sockets.emit(command.type, command);
@@ -22,8 +29,9 @@ room.subscribe((command) => {
     console.log(`ROOM-BROADCAST | ${(new Date()).toUTCString()} | TYPE: ${command.type}`);
     io.sockets.emit(command.type, command);
 });
+
 io.on('connection', (socket) => {
-    console.log(`Player ${socket.id} connected`);
+    console.log(`CONNECTION | ${(new Date()).toUTCString()} | ID: ${socket.id}`);
     game.connectPlayer(socket.id);
 
     socket.on('disconnect', () => {

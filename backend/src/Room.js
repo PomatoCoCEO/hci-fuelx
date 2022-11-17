@@ -4,9 +4,10 @@ import { utils } from "./utils.js";
 
 export default class Room {
 
-    constructor() {
+    constructor(notify) {
         this.rooms = {};
         this.observers = [];
+        this.notify = notify;
     }
     
     shortId(playerId) {
@@ -23,10 +24,6 @@ export default class Room {
             observerFunction(command);
     }
 
-    notify(socket, command) {
-        socket.emit(command.type, command);
-    }
-
     list(socket, command) {
         this.notify(socket, {
             type: 'list-rooms',
@@ -36,7 +33,7 @@ export default class Room {
 
     create(socket, command) {
         if(this.rooms[command.args.name]) {
-            this.notifyAll({
+            this.notify(socket, {
                 type: 'notification',
                 args: {
                     type: 'error',

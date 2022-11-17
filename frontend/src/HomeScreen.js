@@ -17,7 +17,7 @@ class HomeScreen {
                 label: "Create Room",
                 description: "Create a public or private room",
                 handler: () => {
-                    
+                    this.game.setScreen(this.game.screens.createRoom);
                 }
             }
         ]

@@ -2,27 +2,25 @@ class CreateRoomScreen {
 
     constructor(game) {
         this.game = game;
-        this.rooms = [
-            {
-                id: 'awd21',
-                name: 'Teste',
-                protected: false,
-                players: 2,
-                limitPlayers: 16
-            },
-            {
-                id: 'a31dmaw',
-                name: 'Samuel',
-                protected: true,
-                players: 5,
-                limitPlayers: 16
-            }
-        ]
     }
 
     createElement() {
         this.element = document.createElement('div');
-        this.element.classList.add("rooms-screen");
+        this.element.classList.add("create-room-screen");
+        this.element.innerHTML = (`
+            <button class="go-back"></button>
+            <div class="create-room">
+                <input type="text" class="create-room-input">
+                <button class="create-room-btn">CREATE ROOM</button>
+            </div>
+        `);
+        this.element.querySelector('.go-back').addEventListener('click', () => {
+            this.game.setScreen(this.game.screens.home);
+        });
+
+        this.element.querySelector('.create-room-btn').addEventListener('click', () => {
+            this.game.socketHandler.createRoom(this.element.querySelector('.create-room-input').value);
+        });
     }
 
     close() {
@@ -30,6 +28,8 @@ class CreateRoomScreen {
     }
 
     init(container) {
+        this.createElement();
+        container.appendChild(this.element);
     }
 
 }

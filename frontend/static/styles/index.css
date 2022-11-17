@@ -262,6 +262,7 @@ body {
   overflow: scroll;
 }
 
+
 .room {
   display: flex;
   flex-direction: row;
@@ -302,4 +303,55 @@ body {
   right: 5vh;
   width: 10vh;
   height: 10vh;
+}
+
+.create-room-screen {
+  display: flex;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.create-room {
+  width: 80vw;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  align-content: center;
+  align-items: center;
+}
+
+.create-room-btn {
+  padding: 1vh;
+  position: relative;
+  background: green;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 1vh;
+  color: white;
+  margin: 5vh;
+  font-size: 6vh;
+  font-family: 'Common Pixel', sans-serif;
+  outline: 0;
+}
+
+.create-room-input {
+  padding: 1vh;
+  position: relative;
+  background: orange;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 1vh;
+  color: white;
+  margin: 5vh;
+  font-size: 6vh;
+  width: 70vw;;
+  font-family: 'Common Pixel', sans-serif;
+  outline: 0;
 }

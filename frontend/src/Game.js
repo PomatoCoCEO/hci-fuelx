@@ -143,10 +143,11 @@ class Game {
 
         this.screens = {
             rooms: new RoomListScreen(this),
-            home: new HomeScreen(this)
+            home: new HomeScreen(this),
+            createRoom: new CreateRoomScreen(this)
         }
 
-        this.setScreen(this.screens.rooms);
+        this.setScreen(this.screens.createRoom);
     }
 
 }

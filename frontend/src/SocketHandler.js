@@ -7,15 +7,17 @@ class SocketHandler {
     }
 
     listRooms() {
-        console.log('list-rooms');
+        this.socket.emit('list-rooms', {});
+    }
+
+    createRoom(room) {
         this.socket.emit('create-room', {
             args: {
-                name: 'a',
+                name: room,
                 players: 0,
                 limitPlayers: 16
             }
         });
-        this.socket.emit('list-rooms', {});
     }
 
     movePlayer(direction) {

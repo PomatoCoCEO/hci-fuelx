@@ -6,6 +6,18 @@ class SocketHandler {
         this.map = config.map;
     }
 
+    listRooms() {
+        console.log('list-rooms');
+        this.socket.emit('create-room', {
+            args: {
+                name: 'a',
+                players: 0,
+                limitPlayers: 16
+            }
+        });
+        this.socket.emit('list-rooms', {});
+    }
+
     movePlayer(direction) {
         this.socket.emit('move-player', {
             playerId: this.socket.id,
@@ -60,6 +72,12 @@ class SocketHandler {
 
             this.socket.on('notification', (command) => {
                 this.map.game.addNotification(command.args);
+            });
+
+            this.socket.on('list-rooms', (command) => {
+                if(this.game.screen === this.game.screens.rooms) {
+                    this.game.screen.update(command.args);
+                }
             });
         });
     }

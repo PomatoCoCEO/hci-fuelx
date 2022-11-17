@@ -87,10 +87,14 @@ body {
   position: absolute;
   left: 0;
   top: 0;
-  width: 20%;
-  margin-left: 20px;
-  height: 10%;
+  width: 20vw;
+  margin-left: 1vw;
+  margin-top: 2vh;
+  height: 10vh;
   accent-color: green;
+  -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
 }
 
 #timer {
@@ -98,8 +102,8 @@ body {
   color: white;
   width: 50%;
   top: 0;
+  margin: 0;
   text-align: center;
-  margin: auto;
   font-size: 8vw;
   font-family: 'Common Pixel', sans-serif;                             
 }
@@ -241,4 +245,61 @@ body {
   transform: translateX(15vh) translateY(30vh) rotate(180deg);
 }
 
+.rooms-screen {
+  display: flex;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  justify-items: center;
+  align-content: center;
+  align-items: center;
+}
 
+.rooms-list {
+  width: 80vw;
+  height: 70vh;
+  overflow: scroll;
+}
+
+.room {
+  display: flex;
+  flex-direction: row;
+  padding: 2vh 3vw;
+  margin: 1vh;
+  background-color: orange;
+  border-radius: 1vh;
+  justify-content: space-between;
+  color: white;
+  font-size: 5vh;
+  font-family: 'Common Pixel', sans-serif;
+}
+
+.room-name {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+}
+
+.room-locker {
+  width: 10vh;
+  height: 10vh;
+}
+
+.go-back {
+  position: absolute;
+  border: 0;
+  border-radius: 1vh;
+  background: none;
+  background-position: center;
+  background-size: 10vh;
+  image-rendering: pixelated;
+  background-image: url('../images/back.png');
+  top: 5vh;
+  right: 5vh;
+  width: 10vh;
+  height: 10vh;
+}

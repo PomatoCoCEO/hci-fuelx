@@ -41,20 +41,20 @@ export default class Game {
             type: 'disconnect-player',
             args: playerId
         });
-        this.notifyAll({
+        /*this.notifyAll({
             type: 'notification',
             args: {
                 type: 'error',
                 title: 'PLAYER',
                 description: `${this.shortId(playerId)} left the game.`
             }
-        });
+        });*/
     }
 
     connectPlayer(playerId) {
         if(!this.players[playerId])
             this.instantiatePlayer(playerId);
-        this.notifyAll({
+        /*this.notifyAll({
             type: 'connect-player',
             args: {
                 players: Object.values(this.players),
@@ -68,7 +68,7 @@ export default class Game {
                 title: 'PLAYER',
                 description: `${this.shortId(playerId)} joined the game.`
             }
-        });
+        });*/
     }
 
     movePlayer({ playerId, direction }) {

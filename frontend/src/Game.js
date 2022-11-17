@@ -49,20 +49,16 @@ class Game {
         }).createElement();
     }
 
-    async init() {
-        this.map = new Map(this);
-        this.map.init();
+    setScreen(screen) {
+        if(this.screen)
+            this.screen.close();
+        this.screen = screen;
+        this.screen.init(this.overlay);
+    }
 
-        this.homeScreen = new HomeScreen(this);
-        await this.homeScreen.init(this.overlay);
-        
-        this.socketHandler = new SocketHandler({
-            connectString: "ws://atomicbits.pt:8080",
-            map: this.map,
-            game: this
-        });
-        
-        await this.socketHandler.init();
+    async startGame() {
+        if(this.screen)
+            this.screen.close();
 
         this.directionInput = new DirectionInput();
         this.directionInput.init();
@@ -132,6 +128,25 @@ class Game {
         }));
 
         this.startGameLoop();
+    }
+
+    async init() {
+        this.map = new Map(this);
+        this.map.init();
+        this.socketHandler = new SocketHandler({
+            connectString: "ws://localhost:8080",
+            map: this.map,
+            game: this
+        });
+        
+        await this.socketHandler.init();
+
+        this.screens = {
+            rooms: new RoomListScreen(this),
+            home: new HomeScreen(this)
+        }
+
+        this.setScreen(this.screens.rooms);
     }
 
 }

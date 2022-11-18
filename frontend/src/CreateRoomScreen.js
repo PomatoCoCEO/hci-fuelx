@@ -10,7 +10,10 @@ class CreateRoomScreen {
         this.element.innerHTML = (`
             <button class="go-back"></button>
             <div class="create-room">
-                <input type="text" class="create-room-input">
+            <p class="create-room-field">Room name:</p>
+            <input type="text" class="create-room-input">
+                <p class="create-room-field">Private?</p>
+                <input class="create-room-private" type="checkbox">
                 <button class="create-room-btn">CREATE ROOM</button>
             </div>
         `);
@@ -19,7 +22,7 @@ class CreateRoomScreen {
         });
 
         this.element.querySelector('.create-room-btn').addEventListener('click', () => {
-            this.game.socketHandler.createRoom(this.element.querySelector('.create-room-input').value);
+            this.game.socketHandler.createRoom(this.element.querySelector('.create-room-input').value, this.element.querySelector('.create-room-private').checked);
         });
     }
 

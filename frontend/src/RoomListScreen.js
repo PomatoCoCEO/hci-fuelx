@@ -17,7 +17,7 @@ class RoomListScreen {
             roomElement.innerHTML = (`
                 <div class="room-name">
                     ${
-                        room.protected ? '<img class="room-locker" src="static/images/locker.png"/>': ''
+                        room.private ? '<img class="room-locker" src="static/images/locker.png"/>': ''
                     }
                     <p>Room: #${room.name}</p>
                 </div>

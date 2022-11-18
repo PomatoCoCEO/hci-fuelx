@@ -355,3 +355,17 @@ body {
   font-family: 'Common Pixel', sans-serif;
   outline: 0;
 }
+
+.create-room-field {
+  color: white;
+  margin: 1vh;
+  font-size: 6vw;
+  font-family: 'Common Pixel', sans-serif;
+}
+
+.create-room-private {
+  width: 5vh;
+  height: 5vh;
+  color: red;
+  border-radius: 1vh;
+}

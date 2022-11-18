@@ -10,12 +10,14 @@ class SocketHandler {
         this.socket.emit('list-rooms', {});
     }
 
-    createRoom(room) {
+    createRoom(room, flag) {
+        console.log(flag);
         this.socket.emit('create-room', {
             args: {
                 name: room,
                 players: 0,
-                limitPlayers: 16
+                limitPlayers: 16,
+                private: flag
             }
         });
     }

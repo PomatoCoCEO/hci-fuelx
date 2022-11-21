@@ -19,7 +19,6 @@ class Player extends GameObject {
             src: config.src || undefined,
             gameObject: this
         });
-        this.drills = []; // for the drills in the user's inventory
         this.pending = [];
         this.element = document.createElement('div');
         this.element.classList.add("Character", "grid-cell");
@@ -33,15 +32,18 @@ class Player extends GameObject {
                 </div>
             <div class="Character_you-arrow"></div>
         `);
-        this.game.container.appendChild(this.element);
+        this.game.overlay .appendChild(this.element);
+    }
+
+    clean() {
+        this.element.remove();
     }
 
     updateName(camera) {
-        this.element.querySelector('.Character_name').innerHTML = (`${this.id}`).substring(0, 8);
-        
-        const left = (this.x - camera.x) + (448/2) - 32 + "px";
-        const top = (this.y - camera.y) - (320/2) - 50 + "px";
-        this.element.style.transform = `translate3d(${left}, ${top}, 0)`;
+        this.element.querySelector('.Character_name').innerHTML = (`${this.id}`).substring(0, 9);
+        const left = (this.x - camera.x) * (this.game.container.offsetWidth / this.game.canvas.width);
+        const top = (this.y - camera.y) * (this.game.container.offsetWidth*3/4 / this.game.canvas.height);
+        this.element.style.transform = `translate3d(${left}px, ${top}px, 0)`;
     }
 
     updatePosition() {
@@ -63,9 +65,6 @@ class Player extends GameObject {
         this.direction = config.direction;
         this.action = config.action;
         if(behavior.type === 'walk') {
-            this.fuel --; // you also have to update the fuel in the
-            this.game.healthBar.decrease(1);
-            // TODO: Verify if next position is empty
             this.movingProgressRemaining = 32;
         }
     }
@@ -102,12 +101,6 @@ class Player extends GameObject {
                 else if(config.action === 'commit-to-jerrycans') {
                     this.commitToJerrycans();
                 }
-                else if (config.action === 'drill') {
-                    this.makeDrill();
-                }
-                else if (config.action === 'collect') {
-                    this.collectFuel();
-                }
             }
         }
         this.updateSprite();
@@ -121,39 +114,8 @@ class Player extends GameObject {
         this.element.querySelector('.Character_coins').innerHTML = this.jerrycans;
     }
 
-    makeDrill() {
-        let drillCost = 10;
-        if(this.fuel > drillCost && this.game.isCellAvailable(this.x, this.y)) {
-            let tile = this.game.cells[[this.x, this.y]];
-            console.log("tile:", tile);
-            this.game.gameObjects.decorations.push(new Drill({
-                src: "static/images/drill.png",
-                x: this.x,
-                y: this.y,
-                game: this.game,
-                tile: tile
-            })); // we need a timer function in the drill so that it can be replaced by a jerrycan
-            this.fuel -= drillCost; // removes 25 fuel after the drill is placed
-            this.game.healthBar.decrease(drillCost);
-        }
-    }
-
     isDead() {
         return fuel <= 0;
-    }
-    collectFuel() {
-        let t = this.game.gameObjects.jerrycans.findIndex(
-            (jerrycan) => jerrycan.x == this.x && jerrycan.y == this.y);
-        if(t != -1) {
-            let jerry = this.game.gameObjects.jerrycans[t];
-            let refill = Math.min(jerry.fuel, 100 - this.fuel);
-            this.fuel += refill;
-            this.game.healthBar.increase(refill);
-            if(refill == jerry.fuel) { // fuel over: jerrycan going away
-                this.game.gameObjects.jerrycans.splice(t, 1);
-            } else { // fuel not over, jerry can be used again
-                jerry.fuel -= refill;
-            }
-        }
-    }    
+    } 
+
 }

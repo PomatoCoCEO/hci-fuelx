@@ -1,24 +1,23 @@
 class HomeScreen {
 
-    constructor() {
-
+    constructor(game) {
+        this.game = game;
     }
 
-    getOptions(resolve) {
+    getOptions() {
         return [
             {
                 label: "Join Room",
                 description: "Join a public or private room",
                 handler: () => {
-                    this.close();
-                    resolve();
+                    this.game.setScreen(this.game.screens.rooms);
                 }
             },
             {
                 label: "Create Room",
                 description: "Create a public or private room",
                 handler: () => {
-                    
+                    this.game.setScreen(this.game.screens.createRoom);
                 }
             }
         ]
@@ -37,13 +36,11 @@ class HomeScreen {
     }
 
     init(container) {
-        return new Promise(resolve => {
-            this.createElement();
-            container.appendChild(this.element);
-            this.keyboardMenu = new KeyboardMenu();
-            this.keyboardMenu.init(this.element);
-            this.keyboardMenu.setOptions(this.getOptions(resolve));
-        });
+        this.createElement();
+        container.appendChild(this.element);
+        this.keyboardMenu = new KeyboardMenu();
+        this.keyboardMenu.init(this.element);
+        this.keyboardMenu.setOptions(this.getOptions());
     }
 
 }

@@ -3,47 +3,46 @@
 }
 
 body {
-    background-color: #fce899;
     padding: 0;
     margin: 0;
     overflow: hidden;
 }
 
 .game-container {
-    position: relative;
-    width: 448px;
-    height: 320px;
-    margin: 0 auto;
-    margin-top: 20px;
-    outline: 1px solid #fff;
-
-    transform: scale(2) translateY(40%);
+  background-color: #fce899;
+  display: flex;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  outline: 1px solid #fff;
+  align-items: center;
+  justify-content: center;
 }
 
 .overlay {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   position: absolute;
+  overflow: hidden;
+  display: flex;
+  vertical-align: middle;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
 }
 
 .game-container canvas {
     image-rendering: pixelated;
-}
-
-.Character_name-container {
-    position: absolute;
-    top: -12px;
-    left: -5px;
-    font-size: 5px;
-    padding: 1px 2px 1px;
-    border-radius: 3px;
-    background: #333;
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
-    white-space: nowrap;
 }
 
 .grid-cell {
@@ -66,10 +65,10 @@ body {
 
   .Character_name-container {
     position: absolute;
-    top: -12px;
-    left: -5px;
-    font-size: 10px;
-    padding: 1px 2px 1px;
+    top: -20vh;
+    left: -8vw;
+    font-size: 2vw;
+    padding: 5px;
     border-radius: 3px;
     background: #333;
     color: white;
@@ -85,63 +84,288 @@ body {
   }
   
 #health {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
   position: absolute;
   left: 0;
   top: 0;
-  height: 10%;
+  width: 20vw;
+  margin-left: 1vw;
+  margin-top: 2vh;
+  height: 10vh;
   accent-color: green;
+  -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
 }
 
 #timer {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    color: white;
-    width: 50%;
-    text-align: center;
-    margin: auto;
-    font-family: 'Common Pixel', sans-serif;                             
+  position: absolute;
+  color: white;
+  width: 50%;
+  top: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 8vw;
+  font-family: 'Common Pixel', sans-serif;                             
 }
 
 .HomeScreen {
-  width: 50%;
   margin: auto;
   text-align: center;
 }
 
-.title {
-  font-size: 40px;
+.HomeScreen .title {
+  margin: 0;
+  font-size: 10vh;
   color: orange;
   height: auto;
   font-family: 'Common Pixel', sans-serif;
 }
 
-.DescriptionBox p {
-  font-size: 10px;
-  color: black;
-  height: auto;
-  font-family: 'Common Pixel', sans-serif;
-}
-
 .HomeScreen button {
-  padding: 5px 5px;
+  padding: 4%;
   position: relative;
   background: green;
-  width: 50%;
   margin: auto;
   margin-top: 10%;
   text-transform: uppercase;
   border: none;
   color: white;
+  font-size: 6vh;
   font-family: 'Common Pixel', sans-serif;
   outline: 0;
+}
+
+.notifications {
+  top: 8vh;
+  position: absolute;
+  right: 0;
+  z-index: 1;
+}
+
+.notification {
+  font-size: 25px;
+  padding: 10px;
+  margin: 20px;
+  border-radius: 3px;
+  background: #333;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-family: 'Common Pixel', sans-serif;
+}
+
+.notification.success .title {
+  color: green;
+}
+
+.notification.error .title {
+  color: red;
+}
+
+.notification.info .title {
+  color: blue;
+}
+
+.notification .description {
+  color: #fff;
+  font-size: 15px;
+}
+
+.action-menu {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+}
+
+.action-button {
+  position: absolute;
+  width: 15vh;
+  height: 15vh;
+  border: 5px solid black;
+  border-radius: 50%;
+  image-rendering: pixelated;
+  background: none;
+  background-position: center;
+  background-size: 15vh;
+  image-rendering: pixelated;
+  margin: 10px;
+  bottom: 0;
+  right: 0;
+}
+
+.collect_button {
+  background-image: url('../images/collect_icon.png');
+}
+
+.drill_button {
+  background-image: url('../images/drill_icon.png');
+}
+
+.trade_button {
+  background-image: url('../images/golden_jerrycan_icon.png');
+}
+
+.move-menu {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40vh;
+  height: 40vh;
+  margin: 20px;
+}
+
+.move-button {
+  position: absolute;
+  width: 15vh;
+  height: 15vh;
+  image-rendering: pixelated;
+  border: none;
+  background: none;
+  background-position: center;
+  background-size:30vh;
+  background-image: url('../images/triangle.png');
+}
+
+.move-left {
+  transform: translateY(15vh) rotate(-90deg);
+}
+
+.move-right {
+  transform: translateY(15vh) translateX(30vh) rotate(90deg);
+}
+
+.move-up {
+  transform: translateX(15vh) rotate(0deg);
+}
+
+.move-down {
+  transform: translateX(15vh) translateY(30vh) rotate(180deg);
+}
+
+.rooms-screen {
+  display: flex;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  justify-items: center;
+  align-content: center;
+  align-items: center;
+}
+
+.rooms-list {
+  width: 80vw;
+  height: 70vh;
+  overflow: scroll;
+}
+
+
+.room {
+  display: flex;
+  flex-direction: row;
+  padding: 2vh 3vw;
+  margin: 1vh;
+  background-color: orange;
+  border-radius: 1vh;
+  justify-content: space-between;
+  color: white;
+  font-size: 5vh;
+  font-family: 'Common Pixel', sans-serif;
+}
+
+.room-name {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+}
+
+.room-locker {
+  width: 10vh;
+  height: 10vh;
+}
+
+.go-back {
+  position: absolute;
+  border: 0;
+  border-radius: 1vh;
+  background: none;
+  background-position: center;
+  background-size: 10vh;
+  image-rendering: pixelated;
+  background-image: url('../images/back.png');
+  top: 5vh;
+  right: 5vh;
+  width: 10vh;
+  height: 10vh;
+}
+
+.create-room-screen {
+  display: flex;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.create-room {
+  width: 80vw;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  align-content: center;
+  align-items: center;
+}
+
+.create-room-btn {
+  padding: 1vh;
+  position: relative;
+  background: green;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 1vh;
+  color: white;
+  margin: 5vh;
+  font-size: 6vh;
+  font-family: 'Common Pixel', sans-serif;
+  outline: 0;
+}
+
+.create-room-input {
+  padding: 1vh;
+  position: relative;
+  background: orange;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 1vh;
+  color: white;
+  margin: 5vh;
+  font-size: 6vh;
+  width: 70vw;;
+  font-family: 'Common Pixel', sans-serif;
+  outline: 0;
+}
+
+.create-room-field {
+  color: white;
+  margin: 1vh;
+  font-size: 6vw;
+  font-family: 'Common Pixel', sans-serif;
+}
+
+.create-room-private {
+  width: 5vh;
+  height: 5vh;
+  color: red;
+  border-radius: 1vh;
 }

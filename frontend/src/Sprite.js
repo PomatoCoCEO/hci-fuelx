@@ -38,10 +38,7 @@ class Sprite {
         }
 
         this.animationFrameProgress = this.animationFrameLimit;
-        this.currentAnimationFrame = (this.currentAnimationFrame + 1) % 
-            this.animations[    
-                this.currentAnimation
-            ].length;
+        this.currentAnimationFrame = (this.currentAnimationFrame + 1) % this.animations[this.currentAnimation].length;
     }
 
     draw(ctx, camera) {

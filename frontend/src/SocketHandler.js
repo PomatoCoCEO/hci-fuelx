@@ -41,10 +41,19 @@ class SocketHandler {
         });
     }
 
+    commit() {
+        this.socket.emit("commit", {
+            playerId: this.socket.id
+            });
+    }
+
     async init() {
         this.socket = io(this.connectString);
         await this.socket.on('connect', () => {
             console.log(`Connected with id ${this.socket.id}`);
+            this.socket.on("key", (command) => {
+                this.game.key = command.args;
+            });
 
             this.socket.on('connect-player', (command) => {
                 for(let player of command.args.players)
@@ -65,6 +74,10 @@ class SocketHandler {
             this.socket.on('fuel-update', (command) => {
                 this.map.networkPlayers.updateFuel(command.args);
             });
+
+            this.socket.on('jerrycan-update', (command) => {
+                this.map.networkPlayers.updateJerrycans(command.args);
+            })
 
             this.socket.on('drill', (command) => {
                 this.map.placeDrill(command.args);

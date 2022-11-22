@@ -16,7 +16,7 @@ function notify(socket, command) {
     socket.emit(command.type, command);
 }
 
-let game = new Game();
+let game = new Game(notify);
 let room = new Room(notify);
 
 
@@ -33,7 +33,7 @@ room.subscribe((command) => {
 io.on('connection', (socket) => {
     console.log(`CONNECTION | ${(new Date()).toUTCString()} | ID: ${socket.id}`);
     game.connectPlayer(socket.id);
-
+    game.sendKey(socket.id); // sending key for decoration
     socket.on('disconnect', () => {
         console.log(`Player ${socket.id} disconnected`);
         game.disconnectPlayer(socket.id);
@@ -51,12 +51,20 @@ io.on('connection', (socket) => {
         game.collect(command);
     });
 
+    socket.on('commit', (command) => {
+        game.commit(command);
+    });
+
     socket.on('list-rooms', (command) => {
         room.list(socket, command);
     });
 
     socket.on('create-room', (command) => {
         room.create(socket, command);
+    });
+
+    socket.on("enter-room", (command) => {
+        room.enter(socket, command);
     });
 });
 

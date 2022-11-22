@@ -38,4 +38,8 @@ class NetworkPlayers {
         if(playerId === this.map.id)
             this.map.game.healthBar.update(fuel);
     }
+
+    updateJerrycans({ playerId, jerrycans }) {
+        this.map.gameObjects.players[playerId].updateJerrycans({jerrycans:jerrycans});
+    }
 }

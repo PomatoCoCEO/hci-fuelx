@@ -4,6 +4,7 @@ class Game {
         this.container = config.container;
         this.overlay = config.overlay;
         this.notifications = config.notifications;
+        
         this.canvas = this.container.querySelector('.game-canvas');
         this.ctx = this.canvas.getContext('2d');
 
@@ -67,6 +68,10 @@ class Game {
         this.healthBar.init();
         this.timeCounter = new TimeCounter(this.overlay);
         this.timeCounter.init();
+        this.jerrycanOverlay = new JerrycanOverlay({
+            overlay: this.overlay,
+            game: this,
+        });
         this.actionMenu = new ActionMenu({
             overlay: this.overlay,
             options: [
@@ -81,7 +86,8 @@ class Game {
                 {
                     class: 'trade_button',
                     handler: () => {
-                        console.log('trade');
+                        // console.log('trade');
+                        this.socketHandler.commit();
                     }
                 }
             ]
@@ -122,10 +128,7 @@ class Game {
 
         new KeyPressListener("KeyV", () => this.socketHandler.drill());
         new KeyPressListener("KeyC", () => this.socketHandler.collect());
-
-        new KeyPressListener("KeyX", () => this.map.camera.update({
-            action: 'commit-to-jerrycans'
-        }));
+        new KeyPressListener("KeyX", () => this.socketHandler.commit());
 
         this.startGameLoop();
     }

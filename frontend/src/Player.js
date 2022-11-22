@@ -57,8 +57,7 @@ class Player extends GameObject {
             this.sprite.setAnimation('walk-' + this.direction);
         } else {
             this.sprite.setAnimation('idle-' + this.direction);
-        }
-        
+        }  
     }
 
     startBehaviour(config, behavior) {
@@ -108,10 +107,17 @@ class Player extends GameObject {
 
     commitToJerrycans() { // commits the fuel to jerrycans
         let x = Math.floor(this.fuel / 2.0);
-        this.jerrycans += x;
         this.fuel -= x;
         this.game.healthBar.decrease(x);
+
+        let new_jerry = this.jerrycans + x;
+        this.updateJerrycans({jerrycans: new_jerry});        
+    }
+
+    updateJerrycans({jerrycans}) {
+        this.jerrycans = jerrycans;
         this.element.querySelector('.Character_coins').innerHTML = this.jerrycans;
+        this.game.jerrycanOverlay.jerrycan.set(this.jerrycans);
     }
 
     isDead() {

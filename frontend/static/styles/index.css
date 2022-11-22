@@ -82,7 +82,39 @@ body {
     margin-left: 1px;
     color: gold;
   }
+
+  .jerrycan-overlay {
+    width: 32px;
+    height: 32px;
+    overflow:hidden;
+  }
+
+  .jerrycan-image {
+    animation: moveSpriteSheet 2s steps(9) infinite;
+  }
+
+  .jerrycan-quantity {
+    z-index: 1;
+    font-size: 2vw;
+    padding: 5px;
+    border-radius: 3px;
+    background: #333;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-family: 'Common Pixel', sans-serif;  
+  }
   
+@keyframes moveSpriteSheet {
+  from {
+    transform:translate3d(0px,0,0)
+  }
+  to {
+    transform:translate3d(-100%,0,0)
+  }
+}
+
 #health {
   position: absolute;
   left: 0;

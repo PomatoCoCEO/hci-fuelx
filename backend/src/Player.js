@@ -51,4 +51,19 @@ export default class Player {
         }
     }
 
+    commit () {
+        let committed_fuel = Math.floor(this.fuel/2);
+        this.updateFuel(this.fuel - committed_fuel);
+        this.jerrycans += committed_fuel;
+        this.notifyAll({
+            type: 'jerrycan-update',
+            args: {
+                playerId: this.id,
+                jerrycans: this.jerrycans
+            }
+        });
+    }
+
+
+
 }

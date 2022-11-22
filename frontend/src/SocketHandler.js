@@ -96,6 +96,13 @@ class SocketHandler {
                     this.game.screen.update(command.args);
                 }
             });
+            
+            this.socket.on('jerrycan-update', ({playerId, jerrycans})=>{
+                console.log("jerrycan-update");
+                let p= this.map.gameObjects.players[playerId];
+                if(p)
+                    p.updateJerrycans({jerrycans:jerrycans});
+            })
         });
     }
 

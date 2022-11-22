@@ -117,7 +117,8 @@ class Player extends GameObject {
     updateJerrycans({jerrycans}) {
         this.jerrycans = jerrycans;
         this.element.querySelector('.Character_coins').innerHTML = this.jerrycans;
-        this.game.jerrycanOverlay.jerrycan.set(this.jerrycans);
+        if(this.isPlayerControlled) 
+            this.game.jerrycanOverlay.set(this.jerrycans);
     }
 
     isDead() {

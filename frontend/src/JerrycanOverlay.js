@@ -21,6 +21,14 @@ class JerrycanOverlay {
         this.element.style.imageRendering = "pixelated";
     }
 
+    setAnimation() {
+        this.element.querySelector(".jerrycan-image").style.animation = "moveSpriteSheet 1.5s steps(9) infinite";
+        console.log('animation started');
+        setTimeout(() => {
+            this.element.querySelector(".jerrycan-image").style.animation = "";
+        }, 2000);
+    }
+
     createElement() {
         this.element = document.createElement('div');
     }

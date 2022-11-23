@@ -98,7 +98,6 @@ body {
     width: 6vw;
     height: 6vw;
     background-size: cover;
-    animation: moveSpriteSheet 2s steps(9) infinite;
     background-image : url('../images/jerrycan_animation.png');
   }
 

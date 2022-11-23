@@ -51,7 +51,7 @@ export default class Player {
         }
     }
 
-    commit () {
+    commit() {
         let committed_fuel = Math.floor(this.fuel/2);
         this.updateFuel(this.fuel - committed_fuel);
         this.jerrycans += committed_fuel;
@@ -63,7 +63,5 @@ export default class Player {
             }
         });
     }
-
-
 
 }

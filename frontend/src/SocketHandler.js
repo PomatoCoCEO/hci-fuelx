@@ -15,11 +15,20 @@ class SocketHandler {
         this.socket.emit('create-room', {
             args: {
                 name: room,
-                players: 0,
-                limitPlayers: 16,
-                private: flag
+                exclusive: flag,
+                password: 'teste'
             }
         });
+    }
+
+    joinRoom(room, name) {
+        this.socket.emit('connect-player', {
+            args: {
+                room,
+                playerId: this.socket.id,
+                name
+            }
+        })
     }
 
     movePlayer(direction) {

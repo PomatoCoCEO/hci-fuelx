@@ -14,15 +14,10 @@ class JerrycanOverlay {
         this.fuel = jerrycans;
         this.element.innerHTML = `
                 <div class="jerrycan-overlay">
-                    <img class="jerrycan-image" src = "${this.jerrycanImage}">
-                    <div class="jerrycan-quantity">${this.fuel}<div>
+                <div class="jerrycan-quantity">${this.fuel}</div>
+                    <div class="jerrycan-image" src = "${this.jerrycanImage}"></div>
                 </div>
             `;
-        const offsetX = 8;
-        const offsetY = -6.5;
-        let str = `translate(${Math.round(offsetX)}vh,${Math.round(offsetY)}vh)`;
-        this.element.style.transform = str;
-        this.element.style.scale = 6;
         this.element.style.imageRendering = "pixelated";
     }
 

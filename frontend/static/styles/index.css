@@ -84,36 +84,49 @@ body {
   }
 
   .jerrycan-overlay {
-    width: 32px;
-    height: 32px;
-    overflow:hidden;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    top: 0;
+    right: 0;
   }
 
   .jerrycan-image {
+    width: 6vw;
+    height: 6vw;
+    background-size: cover;
     animation: moveSpriteSheet 2s steps(9) infinite;
+    background-image : url('../images/jerrycan_animation.png');
   }
 
   .jerrycan-quantity {
     z-index: 1;
-    font-size: 2vw;
+    font-size: 4vw;
     padding: 5px;
-    border-radius: 3px;
-    background: #333;
     color: white;
     font-weight: bold;
     text-transform: uppercase;
     white-space: nowrap;
     font-family: 'Common Pixel', sans-serif;  
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
   }
   
-@keyframes moveSpriteSheet {
-  from {
-    transform:translate3d(0px,0,0)
+  @keyframes moveSpriteSheet {
+    from {
+      background-position-x: 0px;
+    }
+    to {
+      background-position-x: calc(6vw * 9);
+    }
   }
-  to {
-    transform:translate3d(-100%,0,0)
-  }
-}
 
 #health {
   position: absolute;
@@ -125,8 +138,8 @@ body {
   height: 10vh;
   accent-color: green;
   -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 #timer {

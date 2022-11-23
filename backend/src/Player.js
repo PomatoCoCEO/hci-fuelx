@@ -59,6 +59,7 @@ export default class Player {
             type: 'jerrycan-update',
             args: {
                 playerId: this.id,
+                fuel: this.fuel,
                 jerrycans: this.jerrycans
             }
         });

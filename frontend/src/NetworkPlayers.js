@@ -21,7 +21,9 @@ class NetworkPlayers {
                 isPlayerControlled: player.id === this.map.id,
                 x: player.x,
                 y: player.y,
-                game: this.map.game
+                game: this.map.game,
+                fuel: player.fuel,
+                jerrycans: player.jerrycans
             });
         }
     }
@@ -39,7 +41,8 @@ class NetworkPlayers {
             this.map.game.healthBar.update(fuel);
     }
 
-    updateJerrycans({ playerId, jerrycans }) {
+    updateJerrycans({ playerId, fuel, jerrycans }) {
+        this.map.gameObjects.players[playerId].fuel = fuel; // do you really want this?
         this.map.gameObjects.players[playerId].updateJerrycans({jerrycans:jerrycans});
     }
 }

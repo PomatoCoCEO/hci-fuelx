@@ -3,8 +3,8 @@ class Player extends GameObject {
         super(config);
         this.id = config.id;
         this.name = config.name;
-        this.fuel = 100;
-        this.jerrycans = 0;
+        this.fuel = config.fuel | 100;
+        this.jerrycans = config.jerrycans | 0;
         this.directionUpdate = {
             'up': ['y', -2],
             'down': ['y', 2],
@@ -28,7 +28,7 @@ class Player extends GameObject {
             <div class="Character_shadow grid-cell"></div>
                 <div class="Character_name-container">
                     <span class="Character_name"></span>
-                    <span class="Character_coins">0</span>
+                    <span class="Character_coins">${this.jerrycans}</span>
                 </div>
             <div class="Character_you-arrow"></div>
         `);
@@ -97,14 +97,15 @@ class Player extends GameObject {
                         type: 'walk'
                     });
                 }
-                else if(config.action === 'commit-to-jerrycans') {
+                /*else if(config.action === 'commit-to-jerrycans') {
                     this.commitToJerrycans();
-                }
+                }*/ 
             }
         }
         this.updateSprite();
     }
 
+    /* 
     commitToJerrycans() { // commits the fuel to jerrycans
         let x = Math.floor(this.fuel / 2.0);
         this.fuel -= x;
@@ -112,7 +113,7 @@ class Player extends GameObject {
 
         let new_jerry = this.jerrycans + x;
         this.updateJerrycans({jerrycans: new_jerry});        
-    }
+    }*/ 
 
     updateJerrycans({jerrycans}) {
         this.jerrycans = jerrycans;

@@ -4,19 +4,21 @@ import { utils } from "./utils.js";
 
 export default class Game {
 
-    constructor(notifyFunc) {
+    constructor(notify, notifyRoom) {
         this.observers = [];
-        this.players = {};
-        this.cells = {};
+        this.rooms = {};
+        this.playerRoom = {};
         this.drillCost = 33;
         this.key = Math.floor(Math.random()*(1<<32));
-        this.notify = notifyFunc;
+        this.notify = notify;
+        this.notifyRoom = notifyRoom;
     }
 
-    instantiatePlayer(playerId) {
-        this.players[playerId] = new Player({
+    instantiatePlayer(room, playerId, name) {
+        this.playerRoom[playerId] = room;
+        this.rooms[room].players[playerId] = new Player({
             id: playerId,
-            name: 'Name...',
+            name,
             x: 0,
             y: 0,
             direction: 'down',
@@ -38,12 +40,16 @@ export default class Game {
     }
 
     disconnectPlayer(playerId) {
-        delete this.players[playerId];
-        this.notifyAll({
+        const room = this.playerRoom[playerId]
+        if(!room)
+            return;
+        delete this.rooms[room].players[playerId];
+        delete this.playerRoom[playerId];
+        this.notifyRoom(room, {
             type: 'disconnect-player',
             args: playerId
         });
-        this.notifyAll({
+        this.notifyRoom(room, {
             type: 'notification',
             args: {
                 type: 'error',
@@ -51,19 +57,26 @@ export default class Game {
                 description: `${this.shortId(playerId)} left the game.`
             }
         });
+        
+        this.notifyAll({
+            type: 'list-rooms',
+            args: Object.values(this.rooms)
+        });
     }
 
-    connectPlayer(playerId) {
-        if(!this.players[playerId])
-            this.instantiatePlayer(playerId);
-        this.notifyAll({
+    connectPlayer({ room, playerId, name }) {
+        console.log(room);
+        console.log(this.rooms);
+        if(!this.rooms[room].players[playerId])
+            this.instantiatePlayer(room, playerId, name);
+        this.notifyRoom(room, {
             type: 'connect-player',
             args: {
-                players: Object.values(this.players),
-                drills: Object.values(this.cells)
+                players: Object.values(this.rooms[room].players),
+                drills: Object.values(this.rooms[room].cells)
             }
         });
-        this.notifyAll({
+        this.notifyRoom(room, {
             type: 'notification',
             args: {
                 type: 'success',
@@ -71,12 +84,18 @@ export default class Game {
                 description: `${this.shortId(playerId)} joined the game.`
             }
         });
+
+        this.notifyAll({
+            type: 'list-rooms',
+            args: Object.values(this.rooms)
+        });
     }
 
     sendKey({playerId}) {
-        const player = this.players[playerId];
-        if(!player)
+        const room = this.playerRoom[playerId];
+        if(!room)
             return;
+        const player = this.rooms[room].players[playerId];
         this.notify(playerId, {
             type: 'key',
             args: this.key
@@ -84,45 +103,49 @@ export default class Game {
     }
 
     movePlayer({ playerId, direction }) {
-        const player = this.players[playerId];
-        if(!player)
+        const room = this.playerRoom[playerId];
+        if(!room)
             return;
+        const player = this.rooms[room].players[playerId];
         
         player.move(direction);
 
-        this.notifyAll({
-            type: 'move-player',
-            args: {
-                playerId,
-                direction
+        this.notifyRoom(room,
+            {
+                type: 'move-player',
+                args: {
+                    playerId,
+                    direction
+                }
             }
-        });
+        );
     }
 
-    isCellFree(pos) {
-        return !this.cells[pos];
+    isCellFree(room, pos) {
+        return !this.rooms[room].cells[pos];
     }
 
-    placeDrill(x, y) {
+    placeDrill(room, x, y) {
         const pos = utils.position(x, y);
-        if(!this.cells[pos])
-            this.cells[pos] = new Cell({
+        if(!this.rooms[room].cells[pos])
+            this.rooms[room].cells[pos] = new Cell({
                 x,
                 y
             });
-        this.cells[pos].startDrill();
+        this.rooms[room].cells[pos].startDrill();
     }
 
     drill({ playerId }) {
-        const player = this.players[playerId];
-        if(!player)
+        const room = this.playerRoom[playerId];
+        if(!room)
             return;
+        const player = this.rooms[room].players[playerId];
 
         const pos = utils.position(player.x, player.y);
-        if(this.isCellFree(pos) && player.fuel >= this.drillCost) {
+        if(this.isCellFree(room, pos) && player.fuel >= this.drillCost) {
             player.updateFuel(player.fuel - this.drillCost);
-            this.placeDrill(player.x, player.y);
-            this.notifyAll({
+            this.placeDrill(room, player.x, player.y);
+            this.notifyRoom(room, {
                 type: 'drill',
                 args: {
                     playerId,
@@ -135,15 +158,16 @@ export default class Game {
     }
 
     collect({ playerId }) {
-        const player = this.players[playerId];
-        if(!player)
+        const room = this.playerRoom[playerId];
+        if(!room)
             return;
+        const player = this.rooms[room].players[playerId];
         
         const pos = utils.position(player.x, player.y);
-        if(this.cells[pos]) {
-            this.cells[pos].collect(player);
+        if(this.rooms[room].cells[pos]) {
+            this.rooms[room].cells[pos].collect(player);
 
-            this.notifyAll({
+            this.notifyRoom(room, {
                 type: 'collect',
                 args: {
                     playerId,
@@ -152,15 +176,57 @@ export default class Game {
                 }
             });
 
-            delete this.cells[pos];
+            delete this.rooms[room].cells[pos];
         }
     }
 
     commit({playerId}) {
-        const player = this.players[playerId];
-        if(!player)
+        const room = this.playerRoom[playerId];
+        if(!room)
             return;
+        const player = this.rooms[room].players[playerId];
 
         player.commit();
     }
+
+    listRooms(socket, command) {
+        this.notify(socket, {
+            type: 'list-rooms',
+            args: Object.values(this.rooms)
+        });
+    }
+
+    createRoom(socket, command) {
+        if(this.rooms[command.args.name]) {
+            this.notify(socket, {
+                type: 'notification',
+                args: {
+                    type: 'error',
+                    title: 'ERROR',
+                    description: 'ROom already exists'
+                }
+            });
+            return;
+        }
+
+        this.rooms[command.args.name] = {
+            name: command.args.name,
+            players: {},
+            maxPlayers: 8,
+            cells: {},
+            exclusive: command.args.exclusive,
+            password: command.args.password
+        }
+
+        this.notify(socket, {
+            type: 'create-room',
+            args: this.rooms[command.args.name]
+        });
+
+        this.notifyAll({
+            type: 'list-rooms',
+            args: Object.values(this.rooms)
+        });
+    }
+
 }

@@ -23,6 +23,7 @@ class CreateRoomScreen {
 
         this.element.querySelector('.create-room-btn').addEventListener('click', () => {
             this.game.socketHandler.createRoom(this.element.querySelector('.create-room-input').value, this.element.querySelector('.create-room-private').checked);
+            this.game.setScreen(this.game.screens.rooms);
         });
     }
 

@@ -1,7 +1,6 @@
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import Game from './Game.js';
-import Room from './Room.js';
 
 const SERVER_PORT = 8080;
 const httpServer = createServer();
@@ -16,8 +15,12 @@ function notify(socket, command) {
     socket.emit(command.type, command);
 }
 
-let game = new Game(notify);
-let room = new Room(notify);
+function notifyRoom(room, command) {
+    console.log(`ROOM-BROADCAST | ${(new Date()).toUTCString()} | TYPE: ${command.type}`);
+    io.to(room).emit(command.type, command);
+}
+
+let game = new Game(notify, notifyRoom);
 
 
 game.subscribe((command) => {
@@ -25,17 +28,8 @@ game.subscribe((command) => {
     io.sockets.emit(command.type, command);
 });
 
-room.subscribe((command) => {
-    console.log(`ROOM-BROADCAST | ${(new Date()).toUTCString()} | TYPE: ${command.type}`);
-    io.sockets.emit(command.type, command);
-});
-
 io.on('connection', (socket) => {
-    console.log(`CONNECTION | ${(new Date()).toUTCString()} | ID: ${socket.id}`);
-    game.connectPlayer(socket.id);
-    game.sendKey(socket.id); // sending key for decoration
     socket.on('disconnect', () => {
-        console.log(`Player ${socket.id} disconnected`);
         game.disconnectPlayer(socket.id);
     });
 
@@ -56,15 +50,18 @@ io.on('connection', (socket) => {
     });
 
     socket.on('list-rooms', (command) => {
-        room.list(socket, command);
+        game.listRooms(socket, command);
     });
 
     socket.on('create-room', (command) => {
-        room.create(socket, command);
+        game.createRoom(socket, command);
     });
 
-    socket.on("enter-room", (command) => {
-        room.enter(socket, command);
+    socket.on("connect-player", (command) => {
+        socket.join(command.args.room);
+        console.log(`CONNECTION | ${(new Date()).toUTCString()} | ID: ${socket.id}`);
+        game.connectPlayer(command.args);
+        game.sendKey(socket.id);
     });
 });
 

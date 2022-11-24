@@ -11,18 +11,19 @@ class RoomListScreen {
         this.roomsElement = document.createElement('div');
         this.roomsElement.classList.add('rooms-list');
         for(let room of this.rooms) {
+            console.log(room);
             let roomElement = document.createElement('div');
             roomElement.classList.add('room');
             roomElement.setAttribute('data-id', room.name);
             roomElement.innerHTML = (`
                 <div class="room-name">
                     ${
-                        room.private ? '<img class="room-locker" src="static/images/locker.png"/>': ''
+                        room.exclusive ? '<img class="room-locker" src="static/images/locker.png"/>': ''
                     }
                     <p>Room: #${room.name}</p>
                 </div>
                 <div class="room-players">
-                    <p>${room.players}/${room.limitPlayers}</p>
+                    <p>${Object.values(room.players).length}/${room.maxPlayers}</p>
                 </div>
             `);
             this.roomsElement.appendChild(roomElement);
@@ -31,7 +32,7 @@ class RoomListScreen {
 
         this.element.querySelectorAll('.room').forEach(roomElement => {
             roomElement.addEventListener('click', () => {
-                console.log(roomElement.dataset.id);
+                this.game.socketHandler.joinRoom(roomElement.dataset.id, 'ColdAtom');
                 this.game.startGame();
             });
         });
@@ -39,7 +40,6 @@ class RoomListScreen {
 
     update(rooms) {
         this.rooms = rooms;
-        console.log('update', rooms);
         this.createRooms();
     }
 

@@ -408,8 +408,7 @@ body {
 }
 
 .create-room-private {
-  width: 5vh;
-  height: 5vh;
-  color: red;
+  width: 4vw;
+  height: 4vw;
   border-radius: 1vh;
 }

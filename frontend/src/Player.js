@@ -3,7 +3,7 @@ class Player extends GameObject {
         super(config);
         this.id = config.id;
         this.name = config.name;
-        this.fuel = 100;
+        this.fuel = config.fuel || 0;
         this.jerrycans = 0;
         this.directionUpdate = {
             'up': ['y', -2],
@@ -33,6 +33,7 @@ class Player extends GameObject {
             <div class="Character_you-arrow"></div>
         `);
         this.game.overlay .appendChild(this.element);
+        this.deadAnimation = false;
     }
 
     clean() {
@@ -56,15 +57,26 @@ class Player extends GameObject {
         if(this.movingProgressRemaining > 0) {
             this.sprite.setAnimation('walk-' + this.direction);
         } else {
-            this.sprite.setAnimation('idle-' + this.direction);
+            if(this.isDead()) {
+                if(!this.deadAnimation) {
+                    this.sprite.setAnimation('dying', 16);
+                    this.deadAnimation = true;
+                } else if(this.sprite.currentAnimationFrame == this.sprite.animations[this.sprite.currentAnimation].length - 1){
+                    this.sprite.setAnimation('dead');
+                }
+            } else {
+                this.sprite.setAnimation('idle-' + this.direction);
+            }
         }  
     }
 
     startBehaviour(config, behavior) {
-        this.direction = config.direction;
-        this.action = config.action;
-        if(behavior.type === 'walk') {
-            this.movingProgressRemaining = 32;
+        if(!this.isDead()) {
+            this.direction = config.direction;
+            this.action = config.action;
+            if(behavior.type === 'walk') {
+                this.movingProgressRemaining = 32;
+            }
         }
     }
 
@@ -91,7 +103,7 @@ class Player extends GameObject {
             this.updatePosition();
         } else {
             if(this.isPlayerControlled){
-                if(config.direction) {
+                if(config.direction && this.fuel > 0) {
                     this.game.socketHandler.movePlayer(config.direction);
                     this.startBehaviour(config, {
                         type: 'walk'
@@ -124,7 +136,7 @@ class Player extends GameObject {
     }
 
     isDead() {
-        return fuel <= 0;
+        return this.fuel <= 0;
     } 
 
 }

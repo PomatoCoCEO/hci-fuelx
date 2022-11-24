@@ -21,6 +21,7 @@ class NetworkPlayers {
                 isPlayerControlled: player.id === this.map.id,
                 x: player.x,
                 y: player.y,
+                fuel: player.fuel,
                 game: this.map.game
             });
         }

@@ -11,7 +11,9 @@ class PlayerSprite extends Sprite {
             'walk-left': [ [0, 0], [1, 0], [2, 0], [3, 0], [4,0] ],
             'walk-right': [ [0, 1], [1, 1], [2, 1], [3, 1], [4,1] ],
             'walk-down': [ [0, 2], [1, 2], [2, 2], [3, 2], [4,2] ],
-            'walk-up': [ [0, 3], [1, 3],[2, 3],[3, 3], [4,3] ]
+            'walk-up': [ [0, 3], [1, 3],[2, 3],[3, 3], [4,3] ],
+            'dying': [ [0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6] ],
+            'dead': [ [6, 6] ]
         };
 
         this.currentAnimation = config.currentAnimation || 'idle-down';
@@ -25,11 +27,11 @@ class PlayerSprite extends Sprite {
 
     
 
-    setAnimation(key) {
+    setAnimation(key, delay) {
         if(this.currentAnimation !== key) {
             this.currentAnimation = key;
             this.currentAnimationFrame = 0;
-            this.animationFrameProgress = this.animationFrameLimit;
+            this.animationFrameProgress = delay || this.animationFrameLimit;
         }
     }
 

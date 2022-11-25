@@ -95,7 +95,7 @@ export default class Game {
         const room = this.playerRoom[playerId];
         if(!room)
             return;
-        const player = this.rooms[room].players[playerId];
+        // const player = this.rooms[room]. mplayers[playerId];
         this.notify(playerId, {
             type: 'key',
             args: this.key

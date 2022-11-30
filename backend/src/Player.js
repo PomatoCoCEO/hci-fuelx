@@ -26,7 +26,10 @@ export default class Player {
         if(!this.directionUpdate[direction])
             return;
         const [property, change] = this.directionUpdate[direction];
+
+
         this[property] += change;
+        
         this.updateFuel(this.fuel - 1);
     }
 

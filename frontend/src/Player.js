@@ -5,12 +5,14 @@ class Player extends GameObject {
         this.name = config.name;
         this.fuel = config.fuel | 100;
         this.jerrycans = config.jerrycans | 0;
+        this.moveDelta = 1;
         this.directionUpdate = {
-            'up': ['y', -2],
-            'down': ['y', 2],
-            'left': ['x', -2],
-            'right': ['x', 2]
-        }
+            'up': ['y', -this.moveDelta],
+            'down': ['y', this.moveDelta],
+            'left': ['x', -this.moveDelta],
+            'right': ['x', this.moveDelta],
+            // 'still': ['x', 0]
+        };
         this.direction = config.direction || 'right';
 
         this.isPlayerControlled = config.isPlayerControlled || false;
@@ -54,7 +56,7 @@ class Player extends GameObject {
     }
 
     updateSprite() {
-        if(this.movingProgressRemaining > 0) {
+        if(this.movingProgressRemaining !== 0) {
             this.sprite.setAnimation('walk-' + this.direction);
         } else {
             if(this.isDead()) {
@@ -66,6 +68,7 @@ class Player extends GameObject {
                 }
             } else {
                 this.sprite.setAnimation('idle-' + this.direction);
+                // this.direction = "still";
             }
         }  
     }
@@ -75,7 +78,7 @@ class Player extends GameObject {
             this.direction = config.direction;
             this.action = config.action;
             if(behavior.type === 'walk') {
-                this.movingProgressRemaining = 32;
+                this.movingProgressRemaining = 64;
             }
         }
     }
@@ -83,7 +86,11 @@ class Player extends GameObject {
     updatePending() {
         if(this.movingProgressRemaining == 0) {
             if(this.pending.length > 0) {
+                this.movingProgressRemaining = -1;
                 let p = this.pending.shift();
+                let dir = p.config.direction;
+                // let act = this.directionUpdate[dir];
+                // let pos = {x: this.x - this.x % 64, y: this.y};
                 this.startBehaviour(p.config, {
                     type: p.type
                 });
@@ -92,8 +99,11 @@ class Player extends GameObject {
     }
 
     forceUpdate(config) {
+        // let direction = config.direction;
+        // let act = this.directionUpdate[direction];
+
         this.pending.push({
-            config,
+            config: config,
             type: 'walk'
         });
     }
@@ -105,13 +115,11 @@ class Player extends GameObject {
             if(this.isPlayerControlled){
                 if(config.direction && this.fuel > 0) {
                     this.game.socketHandler.movePlayer(config.direction);
-                    this.startBehaviour(config, {
-                        type: 'walk'
-                    });
+                    this.movingProgressRemaining = 1;
+                    // this.startBehaviour(config, {
+                    //     type: 'walk'
+                    // });
                 }
-                /*else if(config.action === 'commit-to-jerrycans') {
-                    this.commitToJerrycans();
-                }*/ 
             }
         }
         this.updateSprite();

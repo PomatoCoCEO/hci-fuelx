@@ -5,8 +5,9 @@ class NetworkPlayers {
     }
 
     movePlayer({ playerId, direction }) {
-        if(playerId === this.map.id)
-            return;
+        //if(playerId === this.map.id)
+        //    return;
+        console.log("Calling moveplayer with forceupdate");
         this.map.gameObjects.players[playerId].forceUpdate({
             direction
         });

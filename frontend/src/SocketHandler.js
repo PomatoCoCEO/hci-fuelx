@@ -32,9 +32,10 @@ class SocketHandler {
     }
 
     movePlayer(direction) {
+        console.log("emitting move-player");
         this.socket.emit('move-player', {
             playerId: this.socket.id,
-            direction
+            direction: direction
         });
     }
 
@@ -55,6 +56,34 @@ class SocketHandler {
             playerId: this.socket.id
             });
     }
+
+    /// now let us program the interactions between players
+
+    attack() {
+        this.socket.emit("attack", {
+            playerId: this.socket.id
+        });
+    }
+
+    share() {
+        this.socket.emit("share", {
+            playerId: this.socket.id
+        });
+    }
+
+    flee() {
+        this.socket.emit("flee", {
+            playerId: this.socket.id
+        });
+    }
+
+    steal() {
+        this.socket.emit("steal", {
+            playerId: this.socket.id
+        })
+    }
+
+
 
     async init() {
         this.socket = io(this.connectString);

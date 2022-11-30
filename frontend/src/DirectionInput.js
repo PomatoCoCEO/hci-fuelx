@@ -26,6 +26,7 @@ class DirectionInput {
 
     pressKey(code) {
         const direction = this.map[code];
+        console.log("direction is ", direction);
         if(direction && this.heldDirections.indexOf(direction) === -1)
             this.heldDirections.unshift(direction);
         if(this.heldKeys.indexOf(code) === -1)

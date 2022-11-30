@@ -107,18 +107,25 @@ export default class Game {
         if(!room)
             return;
         const player = this.rooms[room].players[playerId];
-        
-        player.move(direction);
+        let pos = {
+            x: this.x,
+            y: this.y
+        };
+        pos[property] += change;
 
-        this.notifyRoom(room,
-            {
-                type: 'move-player',
-                args: {
-                    playerId,
-                    direction
+        let playersInPos = Object.values(this.rooms[room].players).filter(p => p.x === pos.x && p.y === pos.y);
+        if(playersInPos.length < 2) {
+            player.move(direction);
+            this.notifyRoom(room,
+                {
+                    type: 'move-player',
+                    args: {
+                        playerId,
+                        direction
+                    }
                 }
-            }
-        );
+            );
+        }
     }
 
     isCellFree(room, pos) {
@@ -188,6 +195,90 @@ export default class Game {
 
         player.commit();
     }
+
+    attack({playerId}) {
+        const room = this.playerRoom[playerId];
+        if(!room)
+            return;
+        const player = this.rooms[room].players[playerId];
+        const player2 = Object.values(this.rooms[room].players).find(p => p.x === player.x && p.y === player.y && p.id !== player.id);
+        if(player2) {
+            let sum_fuels = player.fuel + player2.fuel;
+            let p1_ratio = player.fuel / sum_fuels;
+            let spent_1 = Math.floor(player.fuel/2);
+            let spent_2 = Math.floor(player2.fuel/2);
+            let spent_sum = spent_1 + spent_2;
+            if(Math.random() < p1_ratio) {
+                player.updateFuel(Math.min(player.fuel - spent_1 + spent_sum/2,100));
+                player2.updateFuel(Math.max(player2.fuel - spent_2,0));
+            } else {
+                player.updateFuel(Math.max(player.fuel - spent_1,0));
+                player2.updateFuel(Math.floor(player2.fuel - spent_2 + spent_sum/2));
+            }
+
+        }
+    }
+
+    flee({playerId}) {
+        const room = this.playerRoom[playerId];
+        if(!room)
+            return;
+        const player = this.rooms[room].players[playerId];
+        if(player.fuel < 25) return;
+        const player2 = Object.values(this.rooms[room].players).find(p => p.x === player.x && p.y === player.y && p.id !== player.id);
+        if(player2) {
+            let directions = [ {x: 0, y: -1}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 1, y: 0} ];
+            let pos = {x: player.x, y: player.y};
+            for(let i = 0; i<3; i++) {
+                let j;
+                for(j = 1; j< 4; j++) {
+                   let a = {x: pos.x + directions[i].x*j, y: pos.y + directions[i].y*j};
+                   let noPlayersInCell = Object.values(this.rooms[room].players).filter(p => p.x === a.x && p.y === a.y).length;
+                   if(noPlayersInCell<2) continue;
+                   else break;
+                } 
+                if(j == 4) {
+                    player.x = pos.x + directions[i].x*j;
+                    player.y = pos.y + directions[i].y*j;
+                    player.updateFuel(player.fuel - 25);
+                    break;
+                }
+                //! we need a RUN mode for this to work!
+            }
+        }
+        
+
+    }
+
+    steal({playerId}) {
+        const room = this.playerRoom[playerId];
+        if(!room)
+            return;
+        const player = this.rooms[room].players[playerId];
+        const player2 = Object.values(this.rooms[room].players).find(p => p.x === player.x && p.y === player.y && p.id !== player.id);
+        if(player2 && player2.fuel > 25) {
+            if(Math.random() < 0.25) {
+                player2.updateFuel(player2.fuel - 25);
+                player.updateFuel(Math.min(100,player.fuel + 25));
+            }
+        }
+    }
+
+    share({playerId}) {
+        const room = this.playerRoom[playerId];
+        if(!room)
+            return;
+        const player = this.rooms[room].players[playerId];
+        const player2 = Object.values(this.rooms[room].players).find(p => p.x === player.x && p.y === player.y && p.id !== player.id);
+        if(player2) {
+            let fuel1 = player.fuel;
+            let fuel2 = player2.fuel;
+            let half = Math.floor((fuel1 + fuel2) / 2);
+            player2.updateFuel(half);
+            player.updateFuel(player.fuel - half);
+        } // so this is the share part
+    }
+
 
     listRooms(socket, command) {
         this.notify(socket, {

@@ -252,6 +252,22 @@ body {
   background-image: url('../images/golden_jerrycan_icon.png');
 }
 
+.flee_button {
+  background-image: url('../images/flee_icon.png');
+}
+
+.attack_button {
+  background-image: url('../images/attack_icon.png');
+}
+
+.share_button {
+  background-image: url('../images/share_icon.png');
+}
+
+.steal_button {
+  background-image: url('../images/steal_icon.png');
+}
+
 .move-menu {
   position: absolute;
   bottom: 0;

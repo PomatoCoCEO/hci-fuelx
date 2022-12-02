@@ -141,6 +141,60 @@ class SocketHandler {
                 if(p)
                     p.updateJerrycans({jerrycans:jerrycans});
             })
+
+            this.socket.on('interaction-mode', () => {
+                console.log("entering interaction mode...");
+                this.game.actionMenu.alterOptions(
+                    [
+                        {
+                            class: 'flee_button',
+                            handler: () => this.socketHandler.flee() 
+                            // talvez precisemos de mais especificacoes aqui
+                        },
+                        {
+                            class: 'attack_button',
+                            handler: () => this.socketHandler.attack()
+                        },
+                        {
+                            class: 'steal_button',
+                            handler: () => {
+                                // console.log('trade');
+                                this.socketHandler.steal();
+                            }
+                        },
+                        {
+                            class: 'share_button',
+                            handler: () => {
+                                // console.log('trade');
+                                this.socketHandler.share();
+                            }
+                        }
+                        
+                    ]
+                );
+            } );
+
+            this.socket.on('terrain-mode', () => {
+                this.game.actionMenu.alterOptions(
+                    [
+                        {
+                            class: 'collect_button',
+                            handler: () => this.socketHandler.collect()
+                        },
+                        {
+                            class: 'drill_button',
+                            handler: () => this.socketHandler.drill()
+                        },
+                        {
+                            class: 'trade_button',
+                            handler: () => {
+                                // console.log('trade');
+                                this.socketHandler.commit();
+                            }
+                        }
+                    ]
+                );
+            } );
         });
     }
 

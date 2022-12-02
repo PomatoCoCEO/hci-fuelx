@@ -6,6 +6,11 @@ class ActionMenu {
         this.radius = 40;
     }
 
+    alterOptions(options) {
+        this.options = options;
+        this.setOptions();
+    }
+
     setOptions() {
         this.element.innerHTML = this.options.map((option, index) => {
             return (`

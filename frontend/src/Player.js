@@ -11,7 +11,6 @@ class Player extends GameObject {
             'down': ['y', this.moveDelta],
             'left': ['x', -this.moveDelta],
             'right': ['x', this.moveDelta],
-            // 'still': ['x', 0]
         };
         this.direction = config.direction || 'right';
 
@@ -51,8 +50,13 @@ class Player extends GameObject {
 
     updatePosition() {
         const [property, change] = this.directionUpdate[this.direction];
+        console.log("property: ",property,", change:", change);
         this[property] += change;
-        this.movingProgressRemaining--;
+        if(this.x % 64 == 0 && this.y % 64 == 0 && this.movingProgressRemaining < 5) {
+            this.movingProgressRemaining = 0;
+            this.sprite.setAnimation('idle-' + this.direction);
+        }
+        else this.movingProgressRemaining--;
     }
 
     updateSprite() {

@@ -36,6 +36,7 @@ class Player extends GameObject {
         this.game.overlay .appendChild(this.element);
         this.deadAnimation = false;
         this.flee = false;
+        this.busy = false;
     }
 
     clean() {
@@ -56,6 +57,7 @@ class Player extends GameObject {
         if(this.movingProgressRemaining == 0) {
             this.sprite.setAnimation('idle-' + this.direction);
             this.flee = false;
+            this.busy = false;
         }
         else this.movingProgressRemaining--;
     }
@@ -72,6 +74,7 @@ class Player extends GameObject {
                     this.sprite.setAnimation('dead');
                 }
             } else {
+                this.busy = false;
                 this.sprite.setAnimation('idle-' + this.direction);
                 // this.direction = "still";
             }
@@ -119,8 +122,9 @@ class Player extends GameObject {
         if(this.movingProgressRemaining > 0) {
             this.updatePosition();
         } else {
-            if(this.isPlayerControlled){
+            if(this.isPlayerControlled && !this.busy){
                 if(config.direction && this.fuel > 0) {
+                    this.busy = true;
                     this.movingProgressRemaining = -1;
                     this.game.socketHandler.movePlayer(config.direction);
                     // this.startBehaviour(config, {

@@ -121,6 +121,11 @@ export default class Game {
             'left': ['x', -64],
             'right': ['x', 64],
         };
+        let otherPlayerInPos = Object.values(this.rooms[room].players).find(p => p.x === pos.x && p.y === pos.y && p.id !== playerId);
+        if(otherPlayerInPos) {
+            // player is leaving so this guy will no longer interact
+            io.to(otherPlayerInPos.id).emit('terrain-mode',{});
+        }
         let [property, change] = directionUpdate[direction];
         pos[property] += change;
         console.log("position: ",pos);
@@ -259,9 +264,10 @@ export default class Game {
             let pos = {x: player.x, y: player.y};
             for(let i = 0; i<3; i++) {
                 let j;
+                let noPlayersInCell;
                 for(j = 1; j< 4; j++) {
                    let a = {x: pos.x + directions[i].x*j*64, y: pos.y + directions[i].y*j*64};
-                   let noPlayersInCell = Object.values(this.rooms[room].players).filter(p => p.x === a.x && p.y === a.y).length;
+                   noPlayersInCell = Object.values(this.rooms[room].players).filter(p => p.x === a.x && p.y === a.y).length;
                    if(noPlayersInCell<2) continue;
                    else break;
                 } 
@@ -276,14 +282,22 @@ export default class Game {
                             direction: dirNames[i]
                         }
                     });
-                    break;
+                    if(noPlayersInCell === 1) {
+                        let otherPlayer = Object.values(this.rooms[room].players).find(p => p.x === player.x && p.y === player.y && p.id !== player.id);
+                        io.to(otherPlayer.id).emit('interaction-mode',{});
+                        io.to(player.id).emit('interaction-mode',{});
+                    }
+                    else {
+                        io.to(player.id).emit('terrain-mode',{});
+                    }
+                       
                 }
-                //! we need a RUN mode for this to work!
+                    break;
             }
+                //! we need a RUN mode for this to work!
         }
-        
-
     }
+    
 
     steal({playerId}) {
         const room = this.playerRoom[playerId];

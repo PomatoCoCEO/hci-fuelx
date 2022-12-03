@@ -53,8 +53,7 @@ class Player extends GameObject {
         const [property, change] = this.directionUpdate[this.direction];
         console.log("property: ",property,", change:", change);
         this[property] += (this.flee?3:1)*change;
-        if((this.x % 64 == 0 && this.y % 64 == 0 && this.movingProgressRemaining < 5) || this.movingProgressRemaining == 0) {
-            this.movingProgressRemaining = 0;
+        if(this.movingProgressRemaining == 0) {
             this.sprite.setAnimation('idle-' + this.direction);
             this.flee = false;
         }
@@ -92,7 +91,7 @@ class Player extends GameObject {
     }
 
     updatePending() {
-        if(this.movingProgressRemaining == 0) {
+        if(this.movingProgressRemaining <= 0) {
             if(this.pending.length > 0) {
                 this.movingProgressRemaining = -1;
                 let p = this.pending.shift();
@@ -122,8 +121,8 @@ class Player extends GameObject {
         } else {
             if(this.isPlayerControlled){
                 if(config.direction && this.fuel > 0) {
+                    this.movingProgressRemaining = -1;
                     this.game.socketHandler.movePlayer(config.direction);
-                    this.movingProgressRemaining = 1;
                     // this.startBehaviour(config, {
                     //     type: 'walk'
                     // });

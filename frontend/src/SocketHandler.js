@@ -142,31 +142,35 @@ class SocketHandler {
                     p.updateJerrycans({jerrycans:jerrycans});
             })
 
+            this.socket.on('flee-player', (command)=>{
+                this.map.networkPlayers.fleePlayer(command.args);
+            });
+
             this.socket.on('interaction-mode', () => {
                 console.log("entering interaction mode...");
                 this.game.actionMenu.alterOptions(
                     [
                         {
                             class: 'flee_button',
-                            handler: () => this.socketHandler.flee() 
+                            handler: () => this.flee() 
                             // talvez precisemos de mais especificacoes aqui
                         },
                         {
                             class: 'attack_button',
-                            handler: () => this.socketHandler.attack()
+                            handler: () => this.attack()
                         },
                         {
                             class: 'steal_button',
                             handler: () => {
                                 // console.log('trade');
-                                this.socketHandler.steal();
+                                this.steal();
                             }
                         },
                         {
                             class: 'share_button',
                             handler: () => {
                                 // console.log('trade');
-                                this.socketHandler.share();
+                                this.share();
                             }
                         }
                         
@@ -179,17 +183,17 @@ class SocketHandler {
                     [
                         {
                             class: 'collect_button',
-                            handler: () => this.socketHandler.collect()
+                            handler: () => this.collect()
                         },
                         {
                             class: 'drill_button',
-                            handler: () => this.socketHandler.drill()
+                            handler: () => this.drill()
                         },
                         {
                             class: 'trade_button',
                             handler: () => {
                                 // console.log('trade');
-                                this.socketHandler.commit();
+                                this.commit();
                             }
                         }
                     ]

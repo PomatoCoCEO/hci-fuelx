@@ -1,6 +1,7 @@
 import Cell from "./Cell.js";
 import Player from "./Player.js";
 import { utils } from "./utils.js";
+import { io } from './index.js';
 
 export default class Game {
 
@@ -18,7 +19,7 @@ export default class Game {
         this.playerRoom[playerId] = room;
         this.rooms[room].players[playerId] = new Player({
             id: playerId,
-            name,
+            name: name,
             x: 0,
             y: 0,
             direction: 'down',
@@ -64,11 +65,11 @@ export default class Game {
         });
     }
 
-    connectPlayer({ room, playerId, name }) {
+    connectPlayer({ room, playerId, name, socket }) {
         console.log(room);
         console.log(this.rooms);
         if(!this.rooms[room].players[playerId])
-            this.instantiatePlayer(room, playerId, name);
+            this.instantiatePlayer(room, playerId, name, socket);
         this.notifyRoom(room, {
             type: 'connect-player',
             args: {
@@ -104,16 +105,32 @@ export default class Game {
 
     movePlayer({ playerId, direction }) {
         const room = this.playerRoom[playerId];
+    
         if(!room)
             return;
         const player = this.rooms[room].players[playerId];
+        console.log(" player is here ");
         let pos = {
-            x: this.x,
-            y: this.y
+            x: player.x,
+            y: player.y
         };
+
+        const directionUpdate = {
+            'up': ['y', -64],
+            'down': ['y', 64],
+            'left': ['x', -64],
+            'right': ['x', 64],
+        };
+        let [property, change] = directionUpdate[direction];
         pos[property] += change;
+        console.log("position: ",pos);
 
         let playersInPos = Object.values(this.rooms[room].players).filter(p => p.x === pos.x && p.y === pos.y);
+        console.log("length of players in pos is",playersInPos.length);
+        console.log("Player positions: ");
+        for(let p of Object.values(this.rooms[room].players)){
+            console.log("(",p.x,",",p.y,")");
+        }
         if(playersInPos.length < 2) {
             player.move(direction);
             this.notifyRoom(room,
@@ -125,7 +142,17 @@ export default class Game {
                     }
                 }
             );
+            if(playersInPos.length === 1) { // THERE IS ANOTHER PLAYER
+                let otherPlayer = playersInPos[0];
+                console.log("sending interaction mode");
+                io.to(otherPlayer.id).emit('interaction-mode',{});
+                io.to(player.id).emit('interaction-mode',{});
+            }
+            if(playersInPos.length === 0) { // player alone in terrain cell
+                io.to(player.id).emit('terrain-mode',{});
+            }
         }
+
     }
 
     isCellFree(room, pos) {
@@ -228,19 +255,27 @@ export default class Game {
         const player2 = Object.values(this.rooms[room].players).find(p => p.x === player.x && p.y === player.y && p.id !== player.id);
         if(player2) {
             let directions = [ {x: 0, y: -1}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 1, y: 0} ];
+            let dirNames = [ "up", "down","left", "right"];
             let pos = {x: player.x, y: player.y};
             for(let i = 0; i<3; i++) {
                 let j;
                 for(j = 1; j< 4; j++) {
-                   let a = {x: pos.x + directions[i].x*j, y: pos.y + directions[i].y*j};
+                   let a = {x: pos.x + directions[i].x*j*64, y: pos.y + directions[i].y*j*64};
                    let noPlayersInCell = Object.values(this.rooms[room].players).filter(p => p.x === a.x && p.y === a.y).length;
                    if(noPlayersInCell<2) continue;
                    else break;
                 } 
                 if(j == 4) {
-                    player.x = pos.x + directions[i].x*j;
-                    player.y = pos.y + directions[i].y*j;
+                    player.x = pos.x + directions[i].x*3*64;
+                    player.y = pos.y + directions[i].y*3*64;
                     player.updateFuel(player.fuel - 25);
+                    this.notifyRoom(room, {
+                        type: 'flee-player',
+                        args: {
+                            playerId,
+                            direction: dirNames[i]
+                        }
+                    });
                     break;
                 }
                 //! we need a RUN mode for this to work!

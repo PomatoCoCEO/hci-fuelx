@@ -4,7 +4,7 @@ import Game from './Game.js';
 
 const SERVER_PORT = 8080;
 const httpServer = createServer();
-const io = new Server(httpServer, {
+export const io = new Server(httpServer, {
     cors: {
         origin: '*'
     }
@@ -76,7 +76,12 @@ io.on('connection', (socket) => {
     socket.on("connect-player", (command) => {
         socket.join(command.args.room);
         console.log(`CONNECTION | ${(new Date()).toUTCString()} | ID: ${socket.id}`);
-        game.connectPlayer(command.args);
+        game.connectPlayer({
+            room: command.args.room,
+            playerId: command.args.playerId,
+            name: command.args.name,
+            socket: socket
+        });
         game.sendKey(socket.id);
     });
 });

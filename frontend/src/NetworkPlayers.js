@@ -9,9 +9,23 @@ class NetworkPlayers {
         //    return;
         console.log("Calling moveplayer with forceupdate");
         this.map.gameObjects.players[playerId].forceUpdate({
-            direction
+            direction: direction,
+            type:"walk"
         });
     }
+
+    
+    fleePlayer({ playerId, direction }) {
+        //if(playerId === this.map.id)
+        //    return;
+        // console.log("Calling moveplayer with forceupdate");
+        this.map.gameObjects.players[playerId].forceUpdate({
+            direction: direction,
+            type:"flee"
+        });
+    }
+
+
 
     addPlayer(player) {
         if(!this.map.gameObjects.players[player.id]) {

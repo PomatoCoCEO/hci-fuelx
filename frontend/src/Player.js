@@ -35,6 +35,7 @@ class Player extends GameObject {
         `);
         this.game.overlay .appendChild(this.element);
         this.deadAnimation = false;
+        this.flee = false;
     }
 
     clean() {
@@ -51,10 +52,11 @@ class Player extends GameObject {
     updatePosition() {
         const [property, change] = this.directionUpdate[this.direction];
         console.log("property: ",property,", change:", change);
-        this[property] += change;
-        if(this.x % 64 == 0 && this.y % 64 == 0 && this.movingProgressRemaining < 5) {
+        this[property] += (this.flee?3:1)*change;
+        if((this.x % 64 == 0 && this.y % 64 == 0 && this.movingProgressRemaining < 5) || this.movingProgressRemaining == 0) {
             this.movingProgressRemaining = 0;
             this.sprite.setAnimation('idle-' + this.direction);
+            this.flee = false;
         }
         else this.movingProgressRemaining--;
     }
@@ -81,8 +83,10 @@ class Player extends GameObject {
         if(!this.isDead()) {
             this.direction = config.direction;
             this.action = config.action;
-            if(behavior.type === 'walk') {
+            if(behavior.type === 'walk' || behavior.type == "flee") {
                 this.movingProgressRemaining = 64;
+                if(behavior.type == "flee") this.flee = true;
+                else this.flee = false;
             }
         }
     }
@@ -92,7 +96,7 @@ class Player extends GameObject {
             if(this.pending.length > 0) {
                 this.movingProgressRemaining = -1;
                 let p = this.pending.shift();
-                let dir = p.config.direction;
+                // let dir = p.config.direction;
                 // let act = this.directionUpdate[dir];
                 // let pos = {x: this.x - this.x % 64, y: this.y};
                 this.startBehaviour(p.config, {
@@ -108,7 +112,7 @@ class Player extends GameObject {
 
         this.pending.push({
             config: config,
-            type: 'walk'
+            type: config.type
         });
     }
 

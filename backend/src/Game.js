@@ -121,7 +121,7 @@ export default class Game {
             'left': ['x', -64],
             'right': ['x', 64],
         };
-        let otherPlayerInPos = Object.values(this.rooms[room].players).find(p => p.x === pos.x && p.y === pos.y && p.id !== playerId);
+        let otherPlayerInPos = Object.values(this.rooms[room].players).find(p => p.x === pos.x && p.y === pos.y && p.id !== playerId && p.fuel > 0);
         if(otherPlayerInPos) {
             // player is leaving so this guy will no longer interact
             io.to(otherPlayerInPos.id).emit('terrain-mode',{});
@@ -130,7 +130,7 @@ export default class Game {
         pos[property] += change;
         console.log("position: ",pos);
 
-        let playersInPos = Object.values(this.rooms[room].players).filter(p => p.x === pos.x && p.y === pos.y);
+        let playersInPos = Object.values(this.rooms[room].players).filter(p => p.x === pos.x && p.y === pos.y && p.fuel > 0);
         console.log("length of players in pos is",playersInPos.length);
         console.log("Player positions: ");
         for(let p of Object.values(this.rooms[room].players)){
@@ -241,11 +241,40 @@ export default class Game {
             let spent_2 = Math.floor(player2.fuel/2);
             let spent_sum = spent_1 + spent_2;
             if(Math.random() < p1_ratio) {
+                // player 1 wins the fight
                 player.updateFuel(Math.min(player.fuel - spent_1 + spent_sum/2,100));
                 player2.updateFuel(Math.max(player2.fuel - spent_2,0));
+                io.to(player.id).emit('notification',{
+                    args:{
+                        type: 'success',
+                        title:'ATTACK',
+                        description: 'You won'
+                    }
+                });
+                io.to(player2.id).emit('notification',{
+                    args:{
+                        type: 'error',
+                        title:'ATTACK',
+                        description: `${player.id} defeated you`
+                    }
+                });
             } else {
                 player.updateFuel(Math.max(player.fuel - spent_1,0));
                 player2.updateFuel(Math.floor(player2.fuel - spent_2 + spent_sum/2));
+                io.to(player.id).emit('notification',{
+                    args:{
+                        type: 'error',
+                        title:'ATTACK',
+                        description: 'You lost the attack'
+                    }
+                });
+                io.to(player2.id).emit('notification',{
+                    args:{
+                        type: 'success',
+                        title:'ATTACK',
+                        description: `You defended yourself from ${player.id}`
+                    }
+                });
             }
 
         }
@@ -283,7 +312,7 @@ export default class Game {
                         }
                     });
                     if(noPlayersInCell === 1) {
-                        let otherPlayer = Object.values(this.rooms[room].players).find(p => p.x === player.x && p.y === player.y && p.id !== player.id);
+                        let otherPlayer = Object.values(this.rooms[room].players).find(p => p.x === player.x && p.y === player.y && p.id !== player.id && p.fuel > 0);
                         io.to(otherPlayer.id).emit('interaction-mode',{});
                         io.to(player.id).emit('interaction-mode',{});
                     }
@@ -309,6 +338,37 @@ export default class Game {
             if(Math.random() < 0.25) {
                 player2.updateFuel(player2.fuel - 25);
                 player.updateFuel(Math.min(100,player.fuel + 25));
+                io.to(player.id).emit('notification',{
+                    args:{
+                        type: 'success',
+                        title:'STEAL',
+                        description: 'You stole from ' + player2.id
+                    }
+                });
+                io.to(player2.id).emit('notification',{
+                    args:{
+                        type: 'error',
+                        title:'STEAL',
+                        description: player.id + ' stole from you'
+                    }
+                });
+            }
+            else {
+                io.to(player.id).emit('notification',{
+                    args:{
+                        type: 'error',
+                        title:'STEAL',
+                        description: 'You failed to steal from ' + player2.id
+                    }
+                    
+                });
+                io.to(player2.id).emit('notification',{
+                    args:{
+                        type: 'success',
+                        title:'STEAL',
+                        description: player.id + ' tried to steal from you'
+                    }
+                });
             }
         }
     }
@@ -319,12 +379,26 @@ export default class Game {
             return;
         const player = this.rooms[room].players[playerId];
         const player2 = Object.values(this.rooms[room].players).find(p => p.x === player.x && p.y === player.y && p.id !== player.id);
-        if(player2) {
+        if(player2 && player2.fuel < player.fuel) {
             let fuel1 = player.fuel;
             let fuel2 = player2.fuel;
             let half = Math.floor((fuel1 + fuel2) / 2);
             player2.updateFuel(half);
-            player.updateFuel(player.fuel - half);
+            player.updateFuel(fuel1 + fuel2 - half);
+            io.to(player.id).emit('notification',{
+                args: {
+                    type: 'success',
+                    title:'SHARE',
+                    description: 'You shared fuel with ' + player2.id
+                }
+            });
+            io.to(player2.id).emit('notification',{
+                args: {
+                    type: 'success',
+                    title:'SHARE',
+                    description: player.id + ' shared fuel with you'
+                }
+            });
         } // so this is the share part
     }
 
@@ -343,7 +417,7 @@ export default class Game {
                 args: {
                     type: 'error',
                     title: 'ERROR',
-                    description: 'ROom already exists'
+                    description: 'Room already exists'
                 }
             });
             return;

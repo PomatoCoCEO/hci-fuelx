@@ -37,6 +37,7 @@ class PlayerSprite extends Sprite {
 
 
     draw(ctx, camera) {
+        this.gameObject.updateSprite();
         this.gameObject.updateName(camera);
         super.draw(ctx, camera);
     }

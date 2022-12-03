@@ -91,6 +91,10 @@ class Player extends GameObject {
                 else this.flee = false;
             }
         }
+        else {
+            this.movingProgressRemaining = 0;
+            this.updateSprite();
+        }
     }
 
     updatePending() {

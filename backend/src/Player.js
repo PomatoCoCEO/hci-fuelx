@@ -1,7 +1,7 @@
 export default class Player {
     constructor(config) {
         this.id = config.id;
-        //this.socket = config.socket;
+        // this.socket = config.socket;
         this.name = config.name;
         this.x = config.x;
         this.y = config.y;

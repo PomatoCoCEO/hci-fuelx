@@ -29,7 +29,7 @@ class NetworkPlayers {
 
     addPlayer(player) {
         if(!this.map.gameObjects.players[player.id]) {
-            this.map.gameObjects.players[player.id] = new Player({
+            let p = new Player({
                 id: player.id,
                 src: 'static/images/player.png',
                 name: player.name,
@@ -40,6 +40,8 @@ class NetworkPlayers {
                 fuel: player.fuel,
                 jerrycans: player.jerrycans
             });
+            p.updateSprite();
+            this.map.gameObjects.players[player.id] = p;
         }
     }
 

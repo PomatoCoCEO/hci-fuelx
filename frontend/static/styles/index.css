@@ -335,6 +335,19 @@ body {
   font-size: 5vh;
   font-family: 'Common Pixel', sans-serif;
 }
+.no-room {
+  display: flex;
+  flex-direction: row;
+  padding: 2vh 3vw;
+  margin: 1vh;
+  background-color: orange;
+  border-radius: 1vh;
+  justify-content: space-between;
+  color: white;
+  font-size: 5vh;
+  font-family: 'Common Pixel', sans-serif;
+}
+
 
 .room-name {
   display: flex;

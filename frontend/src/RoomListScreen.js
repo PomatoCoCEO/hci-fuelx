@@ -28,6 +28,14 @@ class RoomListScreen {
             `);
             this.roomsElement.appendChild(roomElement);
         }
+        if(this.rooms.length == 0) {
+            let noRoomsElement = document.createElement('div');
+            noRoomsElement.classList.add('no-room');
+            noRoomsElement.innerHTML = (`
+                <p>No rooms available</p>
+            `);
+            this.roomsElement.appendChild(noRoomsElement);
+        }
         this.element.appendChild(this.roomsElement);
 
         this.element.querySelectorAll('.room').forEach(roomElement => {

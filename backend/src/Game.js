@@ -10,7 +10,6 @@ export default class Game {
         this.rooms = {};
         this.playerRoom = {};
         this.drillCost = 33;
-        this.key = Math.floor(Math.random()*(1<<32));
         this.notify = notify;
         this.notifyRoom = notifyRoom;
     }
@@ -99,7 +98,7 @@ export default class Game {
         // const player = this.rooms[room]. mplayers[playerId];
         this.notify(playerId, {
             type: 'key',
-            args: this.key
+            args: room.key
         });
     }
 
@@ -136,7 +135,7 @@ export default class Game {
         for(let p of Object.values(this.rooms[room].players)){
             console.log("(",p.x,",",p.y,")");
         }
-        if(playersInPos.length < 2) {
+        if(playersInPos.length < 2 && !this.hasCactus(room, pos)) {
             player.move(direction);
             this.notifyRoom(room,
                 {
@@ -160,7 +159,14 @@ export default class Game {
 
     }
 
+    hasCactus(room, pos) {
+        let hash = utils.hashCode(pos) ^ room.key;
+        return (hash % 16 == 15);
+    }
+
     isCellFree(room, pos) {
+        let hash = utils.hashCode(pos) ^ room.key;
+        if(this.hasCactus(room, pos)) return false;
         return !this.rooms[room].cells[pos];
     }
 
@@ -429,7 +435,8 @@ export default class Game {
             maxPlayers: 8,
             cells: {},
             exclusive: command.args.exclusive,
-            password: command.args.password
+            password: command.args.password,
+            key: Math.floor(Math.random()*(1<<32))  // key is from a room
         }
 
         this.notify(socket, {

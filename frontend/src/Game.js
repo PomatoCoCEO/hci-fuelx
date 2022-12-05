@@ -150,7 +150,7 @@ class Game {
             createRoom: new CreateRoomScreen(this)
         }
 
-        this.setScreen(this.screens.createRoom);
+        this.setScreen(this.screens.home);
     }
 
 }

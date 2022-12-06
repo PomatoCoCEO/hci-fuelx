@@ -82,7 +82,8 @@ io.on('connection', (socket) => {
             name: command.args.name,
             socket: socket
         });
-        game.sendKey(socket.id);
+        console.log("room is ", command.args.room);
+        game.sendKey({playerId:socket.id, roomId:command.args.room});
     });
 });
 

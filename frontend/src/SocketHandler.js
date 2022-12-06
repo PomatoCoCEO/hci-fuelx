@@ -90,6 +90,7 @@ class SocketHandler {
         await this.socket.on('connect', () => {
             console.log(`Connected with id ${this.socket.id}`);
             this.socket.on("key", (command) => {
+                console.log("the key is ", command.args);
                 this.game.key = command.args;
             });
 

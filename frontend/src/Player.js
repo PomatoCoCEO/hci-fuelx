@@ -63,9 +63,7 @@ class Player extends GameObject {
     }
 
     updateSprite() {
-        if(this.movingProgressRemaining !== 0) {
-            this.sprite.setAnimation('walk-' + this.direction);
-        } else {
+        if(this.movingProgressRemaining === 0) {
             if(this.isDead()) {
                 if(!this.deadAnimation) {
                     this.sprite.setAnimation('dying', 16);
@@ -78,7 +76,9 @@ class Player extends GameObject {
                 this.sprite.setAnimation('idle-' + this.direction);
                 // this.direction = "still";
             }
-        }  
+        }  else if (this.movingProgressRemaining > 0) {
+            this.sprite.setAnimation('walk-' + this.direction);
+        }
     }
 
     startBehaviour(config, behavior) {
@@ -102,12 +102,18 @@ class Player extends GameObject {
             if(this.pending.length > 0) {
                 this.movingProgressRemaining = -1;
                 let p = this.pending.shift();
+                console.log("p is", p);
+                if(p.config.direction === "still") {
+                    this.movingProgressRemaining = 0;
+                    console.log("moving progress remaining is ", this.movingProgressRemaining);
+                }
                 // let dir = p.config.direction;
                 // let act = this.directionUpdate[dir];
                 // let pos = {x: this.x - this.x % 64, y: this.y};
-                this.startBehaviour(p.config, {
-                    type: p.type
-                });
+                else 
+                    this.startBehaviour(p.config, {
+                        type: p.type
+                    });
             }
         }
     }

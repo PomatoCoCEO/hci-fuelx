@@ -91,13 +91,16 @@ export default class Game {
         });
     }
 
-    sendKey({playerId}) {
-        const room = this.playerRoom[playerId];
-        if(!room)
+    sendKey({playerId, roomId}) {
+        let room = this.rooms[roomId];
+
+        if(!room) {
+            console.log("there is no room, rooms are ", this.rooms, "and roomId is ", roomId);
             return;
+        }
         // const player = this.rooms[room]. mplayers[playerId];
-        this.notify(playerId, {
-            type: 'key',
+        console.log("Sending to ",playerId);
+        io.to(playerId).emit("key", {
             args: room.key
         });
     }
@@ -130,12 +133,13 @@ export default class Game {
         console.log("position: ",pos);
 
         let playersInPos = Object.values(this.rooms[room].players).filter(p => p.x === pos.x && p.y === pos.y && p.fuel > 0);
-        console.log("length of players in pos is",playersInPos.length);
+        console.log("length of players in pos",pos,"is",playersInPos.length);
         console.log("Player positions: ");
         for(let p of Object.values(this.rooms[room].players)){
             console.log("(",p.x,",",p.y,")");
         }
-        if(playersInPos.length < 2 && !this.hasCactus(room, pos)) {
+        console.log("cactus in pos: ", this.hasCactus(this.rooms[room], pos));
+        if(playersInPos.length < 2 && !this.hasCactus(this.rooms[room], pos)) {
             player.move(direction);
             this.notifyRoom(room,
                 {
@@ -156,16 +160,28 @@ export default class Game {
                 io.to(player.id).emit('terrain-mode',{});
             }
         }
+        else {
+            direction = "still";
+            io.to(player.id).emit("move-player", {
+                args: {
+                    playerId,
+                    direction // just for the sake of it working
+                }
+            })
+        }
 
     }
 
     hasCactus(room, pos) {
-        let hash = utils.hashCode(pos) ^ room.key;
+        let hash_intermediate = utils.hashCode(utils.position(pos));
+        console.log("intermediate hash: ",hash_intermediate)
+        let hash = hash_intermediate ^ room.key;
+        console.log("hash of position",pos,"is", hash);
         return (hash % 16 == 15);
     }
 
     isCellFree(room, pos) {
-        let hash = utils.hashCode(pos) ^ room.key;
+        // let hash = utils.hashCode(pos) ^ room.key;
         if(this.hasCactus(room, pos)) return false;
         return !this.rooms[room].cells[pos];
     }
@@ -436,8 +452,10 @@ export default class Game {
             cells: {},
             exclusive: command.args.exclusive,
             password: command.args.password,
-            key: Math.floor(Math.random()*(1<<32))  // key is from a room
+            key: Math.abs(Math.floor(Math.random()*(1<<31)))  // key is from a room
         }
+
+        console.log("key for the room:", this.rooms[command.args.name].key);
 
         this.notify(socket, {
             type: 'create-room',

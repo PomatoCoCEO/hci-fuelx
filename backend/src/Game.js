@@ -111,7 +111,7 @@ export default class Game {
         if(!room)
             return;
         const player = this.rooms[room].players[playerId];
-        console.log(" player is here ");
+        // console.log(" player is here ");
         let pos = {
             x: player.x,
             y: player.y
@@ -174,10 +174,11 @@ export default class Game {
 
     hasCactus(room, pos) {
         let hash_intermediate = utils.hashCode(utils.position(pos));
-        console.log("intermediate hash: ",hash_intermediate)
+        console.log("intermediate hash: ",hash_intermediate);
+        console.log("room key:", room.key);
         let hash = hash_intermediate ^ room.key;
-        console.log("hash of position",pos,"is", hash);
-        return (hash % 16 == 15);
+        console.log("hash of position",pos,"is", hash,"and mod is", (hash%16));
+        return ((hash % 16)%8 == 7);
     }
 
     isCellFree(room, pos) {

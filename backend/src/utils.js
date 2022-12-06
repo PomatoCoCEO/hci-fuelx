@@ -2,10 +2,12 @@ export const utils = {
     position: (x, y) => `(${x},${y})`,
     hashCode: (str) => {
         let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            hash = str.charCodeAt(i) + ((hash << 5) - hash);
-            hash = hash & hash;
+        if (str.length == 0) return hash;
+        for (let i = 0; i < this.length; i++) {
+            let char = this.charCodeAt(i);
+            hash = ((hash<<5)-hash)+char;
+            hash = hash & hash; // Convert to 32bit integer
         }
-        return Math.abs(hash);
+        return hash;
     },
 }

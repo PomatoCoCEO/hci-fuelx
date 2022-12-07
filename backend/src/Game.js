@@ -139,7 +139,7 @@ export default class Game {
             console.log("(",p.x,",",p.y,")");
         }
         console.log("cactus in pos: ", this.hasCactus(this.rooms[room], pos));
-        if(playersInPos.length < 2 && !this.hasCactus(this.rooms[room], pos)) {
+        if(playersInPos.length < 2 ){ // && !this.hasCactus(this.rooms[room], pos)) {
             player.move(direction);
             this.notifyRoom(room,
                 {
@@ -183,7 +183,7 @@ export default class Game {
 
     isCellFree(room, pos) {
         // let hash = utils.hashCode(pos) ^ room.key;
-        if(this.hasCactus(room, pos)) return false;
+        // if(this.hasCactus(room, pos)) return false;
         return !this.rooms[room].cells[pos];
     }
 
@@ -242,13 +242,32 @@ export default class Game {
         }
     }
 
+
+
     commit({playerId}) {
         const room = this.playerRoom[playerId];
         if(!room)
             return;
         const player = this.rooms[room].players[playerId];
-
+        let sortedPlayersBefore = Object.values(this.rooms[room].players).sort((a,b) => b.jerrycans - a.jerrycans);
+        console.log("players before: ",sortedPlayersBefore);
         player.commit();
+        let sortedPlayersAfter = Object.values(this.rooms[room].players).sort((a,b) => b.jerrycans - a.jerrycans);
+        console.log("players after: ",sortedPlayersAfter);
+        for(let i = 0; i<sortedPlayersAfter.length; i++) {
+            if(sortedPlayersAfter[i].id !== sortedPlayersBefore[i].id) {
+                io.to(sortedPlayersAfter[i].id).emit('notification',
+                    {
+                        args: {
+                            'type':'success',
+                            'title':'RANK CNAHGE',
+                            'description':'You are now in '+utils.ordinal(i+1)+' place'
+                        } 
+                        
+                    });
+            }
+        }
+
     }
 
     attack({playerId}) {
@@ -462,6 +481,15 @@ export default class Game {
             type: 'create-room',
             args: this.rooms[command.args.name]
         });
+
+        this.notify(socket, {
+            type: 'notification',
+            args: {
+                type: 'success',
+                title: 'ROOM CREATED',
+                description: 'Room '+command.args.name+" created"
+            }
+        })
 
         this.notifyAll({
             type: 'list-rooms',

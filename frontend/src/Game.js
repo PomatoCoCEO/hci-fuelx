@@ -137,7 +137,7 @@ class Game {
         this.map = new Map(this);
         this.map.init();
         this.socketHandler = new SocketHandler({
-            connectString: "ws://atomicbits.pt",
+            connectString: "ws://localhost:8080",// atomicbits.pt",
             map: this.map,
             game: this
         });

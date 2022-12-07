@@ -41,11 +41,14 @@ class SocketHandler {
 
     drill() {
         let player = this.map.gameObjects.players[this.socket.id];
-        let pos = {x: player.x, y:player.y};
-        if(!this.map.gameObjects.decorations[pos] instanceof Cactus)
-            this.socket.emit('drill', {
-                playerId: this.socket.id
-            }); // yup this should do it, sorry samuel :(
+        const pos = position(player.x, player.y);// {x: player.x, y:player.y};
+        let cactus = this.map.gameObjects.decorations[pos];
+        if(cactus && cactus instanceof Cactus) {
+            return;
+        }
+        this.socket.emit('drill', {
+            playerId: this.socket.id
+        }); // yup this should do it, sorry samuel :(
     }
 
     collect() {

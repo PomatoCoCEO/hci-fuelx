@@ -333,6 +333,7 @@ export default class Game {
             let directions = [ {x: 0, y: -1}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 1, y: 0} ];
             let dirNames = [ "up", "down","left", "right"];
             let pos = {x: player.x, y: player.y};
+            io.to(player2.id).emit('terrain-mode',{});
             for(let i = 0; i<3; i++) {
                 let j;
                 let noPlayersInCell;

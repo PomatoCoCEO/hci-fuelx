@@ -28,9 +28,9 @@ class Cell extends GameObject {
     }
 
     update() {
-        const diff = (Date.now() - this.startDrillTime) / 1000;
-        this.progress = Math.min(1, diff / this.drillTime);
-        if(this.occupied == true && this.progress !== 1 && ! this.hasCactus) {
+        if(this.occupied == true && this.progress !== 1 && !this.hasCactus) {
+            const diff = (Date.now() - this.startDrillTime) / 1000;
+            this.progress = Math.min(1, diff / this.drillTime);
             if(this.progress === 1) {
                 this.children.pop();
             }

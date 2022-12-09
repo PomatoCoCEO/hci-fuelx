@@ -231,7 +231,7 @@ body {
   border: 5px solid black;
   border-radius: 50%;
   image-rendering: pixelated;
-  background: none;
+  background-color: #fce899;  
   background-position: center;
   background-size: 15vh;
   image-rendering: pixelated;

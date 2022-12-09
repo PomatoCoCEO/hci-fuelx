@@ -9,7 +9,7 @@ export default class Game {
         this.observers = [];
         this.rooms = {};
         this.playerRoom = {};
-        this.drillCost = 33;
+        this.drillCost = 10;
         this.notify = notify;
         this.notifyRoom = notifyRoom;
     }

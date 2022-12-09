@@ -20,6 +20,8 @@ class Game {
             this.container.webkitRequestFullscreen();
         } else if (this.container.msRequestFullscreen) { /* IE11 */
             this.container.msRequestFullscreen();
+        } else if (this.container.mozRequestFullScreen) {
+            this.container.mozRequestFullScreen();
         }
     }
 
@@ -55,6 +57,7 @@ class Game {
             this.screen.close();
         this.screen = screen;
         this.screen.init(this.overlay);
+        this.setFullScreen();
     }
 
     async startGame() {

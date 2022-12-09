@@ -3,7 +3,7 @@ class Cell extends GameObject {
     constructor(config) {
         super(config);
         this.maxFuel = 99;
-        this.drillTime = 60 * 5; // In seconds
+        this.drillTime = 30; // In seconds
         this.progress = 0;
         this.startDrillTime = 0;
         this.occupied = false;
@@ -28,7 +28,7 @@ class Cell extends GameObject {
     }
 
     update() {
-        if(this.occupied == true && this.progress !== 1 && ! this.hasCactus) {
+        if(this.occupied == true && this.progress !== 1 && !this.hasCactus) {
             const diff = (Date.now() - this.startDrillTime) / 1000;
             this.progress = Math.min(1, diff / this.drillTime);
             if(this.progress === 1) {

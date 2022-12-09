@@ -55,6 +55,7 @@ class Game {
             this.screen.close();
         this.screen = screen;
         this.screen.init(this.overlay);
+        this.setFullScreen();
     }
 
     async startGame() {
@@ -137,7 +138,7 @@ class Game {
         this.map = new Map(this);
         this.map.init();
         this.socketHandler = new SocketHandler({
-            connectString: "ws://192.168.137.1:8080",// atomicbits.pt",
+            connectString: "ws://atomicbits.pt:8080",// atomicbits.pt",
             map: this.map,
             game: this
         });

@@ -4,7 +4,7 @@ export default class Cell {
         this.x = config.x || 0;
         this.y = config.y || 0;
         this.maxFuel = 99;
-        this.drillTime = 60 * 5;
+        this.drillTime = 30;
         this.start = 0;
     }
 

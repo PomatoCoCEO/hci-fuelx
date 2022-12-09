@@ -5,6 +5,11 @@ class Map {
         this.gameObjects = {};
         this.calculated = {};
         this.drillCost = 10;
+        this.floorImage = new Image();
+        this.floorImage.src = 'static/images/noise.png';
+        this.floorImage.onload = () => {
+            this.drawFloor();
+        }
     }
 
     get id() {
@@ -15,9 +20,27 @@ class Map {
         return this.gameObjects.players[this.id];
     }
 
+    drawFloor() {
+        let dim = 32, dim_final = 64;
+        for(let i = -6; i<6; i++) {
+            for(let j = -4; j<=4; j++) {
+                let x = this.camera.x - this.camera.x % 64 + 64*i;
+                let y = this.camera.y - this.camera.y % 64 + 64*j;
+                this.game.ctx.drawImage(this.floorImage,
+                    0, 0,
+                    dim, dim,
+                    (x - this.camera.x)+3*64, (y - this.camera.y)+2*64,
+                    dim_final, dim_final
+                );
+            }
+        }
+
+    }
+
     draw() {
         this.getDecorations();
         if(this.camera) {
+            this.drawFloor();
             Object.values(this.gameObjects).forEach(objects => {
                 Object.values(objects).forEach(object => {
                     if(object.children) {

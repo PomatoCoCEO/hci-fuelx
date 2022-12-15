@@ -395,6 +395,18 @@ export default class Game {
                         description: player.id + ' stole from you'
                     }
                 });
+
+                io.to(player.id).emit('steal', {
+                    args: {
+                        type: 1
+                    }
+                });
+    
+                io.to(player2.id).emit('steal', {
+                    args: {
+                        type: 2
+                    }
+                });
             }
             else {
                 io.to(player.id).emit('notification',{
@@ -410,6 +422,18 @@ export default class Game {
                         type: 'success',
                         title:'STEAL',
                         description: player.id + ' tried to steal from you'
+                    }
+                });
+
+                io.to(player.id).emit('steal', {
+                    args: {
+                        type: 3
+                    }
+                });
+    
+                io.to(player2.id).emit('steal', {
+                    args: {
+                        type: 4
                     }
                 });
             }

@@ -141,6 +141,11 @@ class SocketHandler {
             this.socket.on('share', (command) => {
                 this.map.game.audios.share.play();
             });
+
+            this.socket.on('steal', (command) => {
+                if(command.args.type === 1)
+                    this.map.game.audios.steal.play();
+            });
             
             this.socket.on('jerrycan-update', ({playerId, jerrycans})=>{
                 let p= this.map.gameObjects.players[playerId];

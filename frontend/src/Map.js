@@ -127,7 +127,9 @@ class Map {
         cell.startDrill(start);
     }
 
-    removeDrill({ x, y }) {
+    removeDrill({ playerId, x, y }) {
+        if(playerId === this.id)
+            this.game.audios.collect.play(1000);
         delete this.gameObjects.cells[position(x, y)];
     }
 

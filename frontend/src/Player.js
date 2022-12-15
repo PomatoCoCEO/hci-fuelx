@@ -105,7 +105,6 @@ class Player extends GameObject {
                     this.movingProgressRemaining = 0;
                 } else {
                     if(this.isPlayerControlled) {
-                        this.game.audios.move.currentTime = 0.1;
                         this.game.audios.move.play();
                     }
                     this.startBehaviour(p.config, {

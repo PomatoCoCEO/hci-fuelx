@@ -19,8 +19,6 @@ class NetworkPlayers {
         });
     }
 
-
-
     addPlayer(player) {
         if(!this.map.gameObjects.players[player.id]) {
             let p = new Player({

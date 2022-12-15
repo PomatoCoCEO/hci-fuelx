@@ -6,7 +6,6 @@ class TerrainTileSprite extends Sprite {
         this.floorImage = new Image();
         this.floorImage.src = 'static/images/noise.png';
         this.floorImage.onload = () => {
-            this.drawFloor();
         }
     }
     draw(ctx, camera) {

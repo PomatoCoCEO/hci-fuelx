@@ -11,8 +11,12 @@ class Game {
         this.ctx.canvas.style.width  = `${window.innerWidth}px`;
         this.ctx.canvas.style.height = `${window.innerWidth*3/4}px`;
         this.ctx.imageSmoothingEnabled = false;
-        this.backgroundMusic = new Audio("../static/audio/background.mp3");
-        this.backgroundMusic.volume = 0.1;
+
+        this.audios = {
+            backgroundMusic: new Audio("../static/audio/background.mp3"),
+            move: new Audio("../static/audio/move.mp3")
+        }
+        this.audios.backgroundMusic.volume = 0.1;
     }
 
     setFullScreen() {
@@ -91,7 +95,6 @@ class Game {
                 {
                     class: 'trade_button',
                     handler: () => {
-                        // console.log('trade');
                         this.socketHandler.commit();
                     }
                 }
@@ -135,7 +138,7 @@ class Game {
         new KeyPressListener("KeyC", () => this.socketHandler.collect());
         new KeyPressListener("KeyX", () => this.socketHandler.commit());
 
-        this.backgroundMusic.play();
+        this.audios.backgroundMusic.play();
         this.startGameLoop();
     }
 

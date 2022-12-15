@@ -11,7 +11,6 @@ class SocketHandler {
     }
 
     createRoom(room, flag) {
-        console.log(flag);
         this.socket.emit('create-room', {
             args: {
                 name: room,
@@ -32,7 +31,6 @@ class SocketHandler {
     }
 
     movePlayer(direction) {
-        console.log("emitting move-player");
         this.socket.emit('move-player', {
             playerId: this.socket.id,
             direction: direction
@@ -94,9 +92,7 @@ class SocketHandler {
     async init() {
         this.socket = io(this.connectString);
         await this.socket.on('connect', () => {
-            console.log(`Connected with id ${this.socket.id}`);
             this.socket.on("key", (command) => {
-                console.log("the key is ", command.args);
                 this.game.key = command.args;
             });
 
@@ -143,7 +139,6 @@ class SocketHandler {
             });
             
             this.socket.on('jerrycan-update', ({playerId, jerrycans})=>{
-                console.log("jerrycan-update");
                 let p= this.map.gameObjects.players[playerId];
                 if(p)
                     p.updateJerrycans({jerrycans:jerrycans});
@@ -154,7 +149,6 @@ class SocketHandler {
             });
 
             this.socket.on('interaction-mode', () => {
-                console.log("entering interaction mode...");
                 this.game.actionMenu.alterOptions(
                     [
                         {
@@ -169,14 +163,12 @@ class SocketHandler {
                         {
                             class: 'steal_button',
                             handler: () => {
-                                // console.log('trade');
                                 this.steal();
                             }
                         },
                         {
                             class: 'share_button',
                             handler: () => {
-                                // console.log('trade');
                                 this.share();
                             }
                         }
@@ -199,7 +191,6 @@ class SocketHandler {
                         {
                             class: 'trade_button',
                             handler: () => {
-                                // console.log('trade');
                                 this.commit();
                             }
                         }

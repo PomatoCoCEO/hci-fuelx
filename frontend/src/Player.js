@@ -48,18 +48,17 @@ class Player extends GameObject {
         const left = (this.x - camera.x) * (this.game.container.offsetWidth / this.game.canvas.width);
         const top = (this.y - camera.y) * (this.game.container.offsetWidth*3/4 / this.game.canvas.height);
         this.element.style.transform = `translate3d(${left}px, ${top}px, 0)`;
-    }
+    }64
 
     updatePosition() {
         const [property, change] = this.directionUpdate[this.direction];
-        console.log("property: ",property,", change:", change);
-        this[property] += (this.flee?3:1)*change;
+        this[property] += (this.flee?6:2)*change;
         if(this.movingProgressRemaining == 0) {
             this.sprite.setAnimation('idle-' + this.direction);
             this.flee = false;
             this.busy = false;
         }
-        else this.movingProgressRemaining--;
+        else this.movingProgressRemaining -= 2;
     }
 
     updateSprite() {
@@ -102,18 +101,17 @@ class Player extends GameObject {
             if(this.pending.length > 0) {
                 this.movingProgressRemaining = -1;
                 let p = this.pending.shift();
-                console.log("p is", p);
                 if(p.config.direction === "still") {
                     this.movingProgressRemaining = 0;
-                    console.log("moving progress remaining is ", this.movingProgressRemaining);
-                }
-                // let dir = p.config.direction;
-                // let act = this.directionUpdate[dir];
-                // let pos = {x: this.x - this.x % 64, y: this.y};
-                else 
+                } else {
+                    if(this.isPlayerControlled) {
+                        this.game.audios.move.currentTime = 0.1;
+                        this.game.audios.move.play();
+                    }
                     this.startBehaviour(p.config, {
                         type: p.type
                     });
+                }
             }
         }
     }

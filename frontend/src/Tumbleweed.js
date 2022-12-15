@@ -12,7 +12,6 @@ class Tumbleweed extends GameObject {
             src: "static/images/tumbleweed.png",
             gameObject: this
         });
-        // console.log("tumbleweed x: ",this.x);
     }
 
     updatePosition() {

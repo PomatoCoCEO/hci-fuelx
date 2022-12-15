@@ -8,7 +8,7 @@ class Map {
         this.floorImage = new Image();
         this.floorImage.src = 'static/images/noise.png';
         this.floorImage.onload = () => {
-            this.drawFloor();
+            // this.drawFloor();
         }
     }
 
@@ -81,8 +81,6 @@ class Map {
                     const pos = position(x, y);
                     let hash = pos.hashCode() ^ this.game.key;
                     if(hash < 0) hash = - hash;
-                    console.log("pos: " + pos + " hash: " + hash + "mod:"+ (hash % 16), 'game key:', this.game.key);
-                    // let posDeco = this.gameObjects.decorations.findIndex((d) => d.x === x && d.y == y);
                     let f = this.gameObjects.decorations[pos];
                     if(f) continue;
                     if((hash % 16)%8 == 7) {

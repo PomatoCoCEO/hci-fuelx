@@ -11,7 +11,6 @@ class RoomListScreen {
         this.roomsElement = document.createElement('div');
         this.roomsElement.classList.add('rooms-list');
         for(let room of this.rooms) {
-            console.log(room);
             let roomElement = document.createElement('div');
             roomElement.classList.add('room');
             roomElement.setAttribute('data-id', room.name);

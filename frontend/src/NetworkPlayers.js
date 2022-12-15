@@ -51,6 +51,8 @@ class NetworkPlayers {
     }
 
     updateJerrycans({ playerId, fuel, jerrycans }) {
+        if(this.map.id === playerId)
+            this.map.game.audios.golden.play();
         this.map.gameObjects.players[playerId].fuel = fuel; // do you really want this?
         this.map.gameObjects.players[playerId].updateJerrycans({jerrycans:jerrycans});
     }

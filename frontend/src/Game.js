@@ -15,7 +15,9 @@ class Game {
         this.audios = {
             backgroundMusic: new Audio("../static/audio/background.mp3"),
             move: new Audio("../static/audio/move.mp3"),
-            collect: new Audio("../static/audio/collect.mp3")
+            collect: new Audio("../static/audio/collect.mp3"),
+            golden: new Audio("../static/audio/golden.mp3"),
+            plant: new Audio("../static/audio/plant.mp3")
         }
         this.audios.backgroundMusic.volume = 0.1;
     }

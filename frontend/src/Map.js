@@ -112,7 +112,9 @@ class Map {
         }
     }
 
-    placeDrill({ x, y, start }) {
+    placeDrill({ playerId, x, y, start }) {
+        if(playerId === this.id)
+            this.game.audios.plant.play();
         const pos = position(x, y);
         let obj = this.gameObjects.decorations[pos];
         if(obj && obj instanceof Cactus) return; // there is a cactus here, no drill here!
@@ -129,7 +131,7 @@ class Map {
 
     removeDrill({ playerId, x, y }) {
         if(playerId === this.id)
-            this.game.audios.collect.play(1000);
+            this.game.audios.collect.play();
         delete this.gameObjects.cells[position(x, y)];
     }
 

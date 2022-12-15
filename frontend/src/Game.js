@@ -11,6 +11,8 @@ class Game {
         this.ctx.canvas.style.width  = `${window.innerWidth}px`;
         this.ctx.canvas.style.height = `${window.innerWidth*3/4}px`;
         this.ctx.imageSmoothingEnabled = false;
+        this.backgroundMusic = new Audio("../static/audio/background.mp3");
+        this.backgroundMusic.volume = 0.1;
     }
 
     setFullScreen() {
@@ -133,6 +135,7 @@ class Game {
         new KeyPressListener("KeyC", () => this.socketHandler.collect());
         new KeyPressListener("KeyX", () => this.socketHandler.commit());
 
+        this.backgroundMusic.play();
         this.startGameLoop();
     }
 

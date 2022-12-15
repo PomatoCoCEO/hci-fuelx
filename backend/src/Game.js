@@ -442,6 +442,17 @@ export default class Game {
                     description: player.id + ' shared fuel with you'
                 }
             });
+            io.to(player.id).emit('share', {
+                args: {
+                    playerId
+                }
+            });
+
+            io.to(player2.id).emit('share', {
+                args: {
+                    playerId
+                }
+            });
         } // so this is the share part
     }
 

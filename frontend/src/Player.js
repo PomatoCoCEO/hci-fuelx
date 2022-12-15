@@ -65,6 +65,10 @@ class Player extends GameObject {
         if(this.movingProgressRemaining === 0) {
             if(this.isDead()) {
                 if(!this.deadAnimation) {
+                    let camera = this.game.map.camera;
+                    let dist = Math.pow(this.x - camera.x, 2) + Math.pow(this.y - camera.y, 2);
+                    if(Math.sqrt(dist)/32 <= 3)
+                        this.game.audios.dead.play();
                     this.sprite.setAnimation('dying', 16);
                     this.deadAnimation = true;
                 } else if(this.sprite.currentAnimationFrame == this.sprite.animations[this.sprite.currentAnimation].length - 1){
@@ -88,6 +92,13 @@ class Player extends GameObject {
                 this.movingProgressRemaining = 64;
                 if(behavior.type == "flee") this.flee = true;
                 else this.flee = false;
+                if(this.flee) {
+                    let camera = this.game.map.camera;
+                    let dist = Math.pow(this.x - camera.x, 2) + Math.pow(this.y - camera.y, 2);
+                    if(Math.sqrt(dist)/32 <= 3)
+                        this.game.audios.flee.play();
+                } else if(this.isPlayerControlled)
+                    this.game.audios.move.play();
             }
         }
         else {
@@ -104,9 +115,6 @@ class Player extends GameObject {
                 if(p.config.direction === "still") {
                     this.movingProgressRemaining = 0;
                 } else {
-                    if(this.isPlayerControlled) {
-                        this.game.audios.move.play();
-                    }
                     this.startBehaviour(p.config, {
                         type: p.type
                     });

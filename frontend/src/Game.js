@@ -17,7 +17,11 @@ class Game {
             move: new Audio("../static/audio/move.mp3"),
             collect: new Audio("../static/audio/collect.mp3"),
             golden: new Audio("../static/audio/golden.mp3"),
-            plant: new Audio("../static/audio/plant.mp3")
+            plant: new Audio("../static/audio/plant.mp3"),
+            steal: new Audio("../static/audio/steal.mp3"),
+            dead: new Audio("../static/audio/dead.mp3"),
+            flee: new Audio("../static/audio/flee.mp3"),
+            share: new Audio("../static/audio/share.mp3")
         }
         this.audios.backgroundMusic.volume = 0.1;
     }

@@ -137,6 +137,10 @@ class SocketHandler {
                     this.game.screen.update(command.args);
                 }
             });
+
+            this.socket.on('share', (command) => {
+                this.map.game.audios.share.play();
+            });
             
             this.socket.on('jerrycan-update', ({playerId, jerrycans})=>{
                 let p= this.map.gameObjects.players[playerId];

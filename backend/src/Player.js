@@ -8,6 +8,7 @@ export default class Player {
         this.direction = config.direction;
         this.observers = config.game.observers;
         this.notifyAll = config.game.notifyAll;
+        this.skin = config.skin;
         this.fuel = 100;
         this.jerrycans = 0;
 

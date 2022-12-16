@@ -23,14 +23,15 @@ class NetworkPlayers {
         if(!this.map.gameObjects.players[player.id]) {
             let p = new Player({
                 id: player.id,
-                src: 'static/images/player.png',
+                src: `static/images/${player.skin}`,
                 name: player.name,
                 isPlayerControlled: player.id === this.map.id,
                 x: player.x,
                 y: player.y,
                 game: this.map.game,
                 fuel: player.fuel,
-                jerrycans: player.jerrycans
+                jerrycans: player.jerrycans,
+                skin: player.skin
             });
             p.updateSprite();
             this.map.gameObjects.players[player.id] = p;

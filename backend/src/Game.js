@@ -14,7 +14,7 @@ export default class Game {
         this.notifyRoom = notifyRoom;
     }
 
-    instantiatePlayer(room, playerId, name) {
+    instantiatePlayer(room, playerId, name, skin) {
         this.playerRoom[playerId] = room;
         this.rooms[room].players[playerId] = new Player({
             id: playerId,
@@ -22,7 +22,8 @@ export default class Game {
             x: 0,
             y: 0,
             direction: 'down',
-            game: this
+            game: this,
+            skin
         });
     }
 
@@ -64,11 +65,11 @@ export default class Game {
         });
     }
 
-    connectPlayer({ room, playerId, name, socket }) {
+    connectPlayer({ room, playerId, name, skin }) {
         console.log(room);
         console.log(this.rooms);
         if(!this.rooms[room].players[playerId])
-            this.instantiatePlayer(room, playerId, name, socket);
+            this.instantiatePlayer(room, playerId, name, skin);
         this.notifyRoom(room, {
             type: 'connect-player',
             args: {

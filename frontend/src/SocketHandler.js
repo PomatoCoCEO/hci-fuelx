@@ -20,12 +20,13 @@ class SocketHandler {
         });
     }
 
-    joinRoom(room, name) {
+    joinRoom(room, name, skin) {
         this.socket.emit('connect-player', {
             args: {
                 room,
                 playerId: this.socket.id,
-                name
+                name,
+                skin
             }
         })
     }
@@ -147,7 +148,6 @@ class SocketHandler {
             });
 
             this.socket.on('steal', (command) => {
-                console.log(command.args.type)
                 if(command.args.type === 1 || command.args.type === 4) {
                     this.map.game.audios.steal.play();
                 } else {

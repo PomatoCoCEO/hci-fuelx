@@ -80,7 +80,8 @@ io.on('connection', (socket) => {
             room: command.args.room,
             playerId: command.args.playerId,
             name: command.args.name,
-            socket: socket
+            socket: socket,
+            skin: command.args.skin
         });
         console.log("room is ", command.args.room);
         game.sendKey({playerId:socket.id, roomId:command.args.room});

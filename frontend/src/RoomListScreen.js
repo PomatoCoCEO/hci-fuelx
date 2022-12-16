@@ -39,8 +39,8 @@ class RoomListScreen {
 
         this.element.querySelectorAll('.room').forEach(roomElement => {
             roomElement.addEventListener('click', () => {
-                this.game.socketHandler.joinRoom(roomElement.dataset.id, 'ColdAtom');
-                this.game.startGame();
+                this.game.setScreen(this.game.screens.costumize);
+                this.game.screen.setRoom(roomElement.dataset.id);
             });
         });
     }

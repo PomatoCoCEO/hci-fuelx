@@ -5,6 +5,7 @@ class Player extends GameObject {
         this.name = config.name;
         this.fuel = config.fuel | 100;
         this.jerrycans = config.jerrycans | 0;
+        this.skin = config.skin;
         this.moveDelta = 1;
         this.directionUpdate = {
             'up': ['y', -this.moveDelta],

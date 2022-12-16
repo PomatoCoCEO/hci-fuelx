@@ -127,6 +127,14 @@ body {
     }
   }
 
+.skin-player {
+  width: 15vh;
+  height: 15vh;
+  image-rendering: pixelated;
+  background-size: 135vh 135vh;
+  background-image: url('../images/player.png');
+}
+
 #health {
   position: absolute;
   left: 0;
@@ -277,8 +285,35 @@ body {
   margin: 20px;
 }
 
+.skin {
+  display: flex;
+  justify-content: space-between;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}
+
 .move-button {
   position: absolute;
+  width: 15vh;
+  height: 15vh;
+  image-rendering: pixelated;
+  border: none;
+  background: none;
+  background-position: center;
+  background-size:30vh;
+  background-image: url('../images/triangle.png');
+}
+
+.rotate-left {
+  transform: rotate(-90deg);
+}
+
+.rotate-right {
+  transform: rotate(90deg);
+}
+
+.skin-button {
   width: 15vh;
   height: 15vh;
   image-rendering: pixelated;

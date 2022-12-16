@@ -142,9 +142,17 @@ class SocketHandler {
                 this.map.game.audios.share.play();
             });
 
+            this.socket.on('attack', (command) => {
+                this.map.game.audios.fight.play();
+            });
+
             this.socket.on('steal', (command) => {
-                if(command.args.type === 1)
+                console.log(command.args.type)
+                if(command.args.type === 1 || command.args.type === 4) {
                     this.map.game.audios.steal.play();
+                } else {
+                    this.map.game.audios.fail_steal.play();
+                }
             });
             
             this.socket.on('jerrycan-update', ({playerId, jerrycans})=>{

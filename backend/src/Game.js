@@ -319,6 +319,11 @@ export default class Game {
                 });
             }
 
+            io.to(player.id).emit('attack', { 
+            });
+
+            io.to(player2.id).emit('attack', {
+            });
         }
     }
 

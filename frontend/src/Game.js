@@ -21,7 +21,9 @@ class Game {
             steal: new Audio("../static/audio/steal.mp3"),
             dead: new Audio("../static/audio/dead.mp3"),
             flee: new Audio("../static/audio/flee.mp3"),
-            share: new Audio("../static/audio/share.mp3")
+            share: new Audio("../static/audio/share.mp3"),
+            fight: new Audio("../static/audio/fight.mp3"),
+            fail_steal: new Audio("../static/audio/fail_steal.mp3")
         }
         this.audios.backgroundMusic.volume = 0.1;
     }

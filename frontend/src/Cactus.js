@@ -7,7 +7,6 @@ class Cactus extends GameObject {
             dim: 16,
             dim_final: 64
         });
-        // console.log("cactus x: ",this.x);
     }
 
     update() {}

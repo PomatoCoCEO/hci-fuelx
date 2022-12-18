@@ -127,6 +127,14 @@ body {
     }
   }
 
+.skin-player {
+  width: 15vh;
+  height: 15vh;
+  image-rendering: pixelated;
+  background-size: 135vh 135vh;
+  background-image: url('../images/player.png');
+}
+
 #health {
   position: absolute;
   left: 0;
@@ -231,7 +239,7 @@ body {
   border: 5px solid black;
   border-radius: 50%;
   image-rendering: pixelated;
-  background: none;
+  background-color: #fce899;  
   background-position: center;
   background-size: 15vh;
   image-rendering: pixelated;
@@ -252,6 +260,22 @@ body {
   background-image: url('../images/golden_jerrycan_icon.png');
 }
 
+.flee_button {
+  background-image: url('../images/flee_icon.png');
+}
+
+.attack_button {
+  background-image: url('../images/attack_icon.png');
+}
+
+.share_button {
+  background-image: url('../images/share_icon.png');
+}
+
+.steal_button {
+  background-image: url('../images/steal_icon.png');
+}
+
 .move-menu {
   position: absolute;
   bottom: 0;
@@ -261,8 +285,35 @@ body {
   margin: 20px;
 }
 
+.skin {
+  display: flex;
+  justify-content: space-between;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}
+
 .move-button {
   position: absolute;
+  width: 15vh;
+  height: 15vh;
+  image-rendering: pixelated;
+  border: none;
+  background: none;
+  background-position: center;
+  background-size:30vh;
+  background-image: url('../images/triangle.png');
+}
+
+.rotate-left {
+  transform: rotate(-90deg);
+}
+
+.rotate-right {
+  transform: rotate(90deg);
+}
+
+.skin-button {
   width: 15vh;
   height: 15vh;
   image-rendering: pixelated;
@@ -319,6 +370,19 @@ body {
   font-size: 5vh;
   font-family: 'Common Pixel', sans-serif;
 }
+.no-room {
+  display: flex;
+  flex-direction: row;
+  padding: 2vh 3vw;
+  margin: 1vh;
+  background-color: orange;
+  border-radius: 1vh;
+  justify-content: space-between;
+  color: white;
+  font-size: 5vh;
+  font-family: 'Common Pixel', sans-serif;
+}
+
 
 .room-name {
   display: flex;

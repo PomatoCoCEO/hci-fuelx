@@ -44,7 +44,6 @@ class Sprite {
     draw(ctx, camera) {
         const [x, y] = this.frame;
         let dim = this.dim;
-
         this.isLoaded && ctx.drawImage(this.image,
                                        x * dim, y * dim,
                                        dim, dim,

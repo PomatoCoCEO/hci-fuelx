@@ -5,24 +5,36 @@ class NetworkPlayers {
     }
 
     movePlayer({ playerId, direction }) {
-        if(playerId === this.map.id)
-            return;
         this.map.gameObjects.players[playerId].forceUpdate({
-            direction
+            direction: direction,
+            type:"walk"
+        });
+    }
+
+    
+    fleePlayer({ playerId, direction }) {
+        this.map.gameObjects.players[playerId].forceUpdate({
+            direction: direction,
+            type:"flee"
         });
     }
 
     addPlayer(player) {
         if(!this.map.gameObjects.players[player.id]) {
-            this.map.gameObjects.players[player.id] = new Player({
+            let p = new Player({
                 id: player.id,
-                src: 'static/images/player.png',
+                src: `static/images/${player.skin}`,
                 name: player.name,
                 isPlayerControlled: player.id === this.map.id,
                 x: player.x,
                 y: player.y,
-                game: this.map.game
+                game: this.map.game,
+                fuel: player.fuel,
+                jerrycans: player.jerrycans,
+                skin: player.skin
             });
+            p.updateSprite();
+            this.map.gameObjects.players[player.id] = p;
         }
     }
 
@@ -39,7 +51,10 @@ class NetworkPlayers {
             this.map.game.healthBar.update(fuel);
     }
 
-    updateJerrycans({ playerId, jerrycans }) {
+    updateJerrycans({ playerId, fuel, jerrycans }) {
+        if(this.map.id === playerId)
+            this.map.game.audios.golden.play();
+        this.map.gameObjects.players[playerId].fuel = fuel; // do you really want this?
         this.map.gameObjects.players[playerId].updateJerrycans({jerrycans:jerrycans});
     }
 }

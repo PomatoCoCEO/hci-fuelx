@@ -11,6 +11,21 @@ class Game {
         this.ctx.canvas.style.width  = `${window.innerWidth}px`;
         this.ctx.canvas.style.height = `${window.innerWidth*3/4}px`;
         this.ctx.imageSmoothingEnabled = false;
+
+        this.audios = {
+            backgroundMusic: new Audio("../static/audio/background.mp3"),
+            move: new Audio("../static/audio/move.mp3"),
+            collect: new Audio("../static/audio/collect.mp3"),
+            golden: new Audio("../static/audio/golden.mp3"),
+            plant: new Audio("../static/audio/plant.mp3"),
+            steal: new Audio("../static/audio/steal.mp3"),
+            dead: new Audio("../static/audio/dead.mp3"),
+            flee: new Audio("../static/audio/flee.mp3"),
+            share: new Audio("../static/audio/share.mp3"),
+            fight: new Audio("../static/audio/fight.mp3"),
+            fail_steal: new Audio("../static/audio/fail_steal.mp3")
+        }
+        this.audios.backgroundMusic.volume = 0.1;
     }
 
     setFullScreen() {
@@ -20,6 +35,8 @@ class Game {
             this.container.webkitRequestFullscreen();
         } else if (this.container.msRequestFullscreen) { /* IE11 */
             this.container.msRequestFullscreen();
+        } else if (this.container.mozRequestFullScreen) {
+            this.container.mozRequestFullScreen();
         }
     }
 
@@ -55,6 +72,7 @@ class Game {
             this.screen.close();
         this.screen = screen;
         this.screen.init(this.overlay);
+        this.setFullScreen();
     }
 
     async startGame() {
@@ -86,7 +104,6 @@ class Game {
                 {
                     class: 'trade_button',
                     handler: () => {
-                        // console.log('trade');
                         this.socketHandler.commit();
                     }
                 }
@@ -130,6 +147,7 @@ class Game {
         new KeyPressListener("KeyC", () => this.socketHandler.collect());
         new KeyPressListener("KeyX", () => this.socketHandler.commit());
 
+        this.audios.backgroundMusic.play();
         this.startGameLoop();
     }
 
@@ -137,7 +155,7 @@ class Game {
         this.map = new Map(this);
         this.map.init();
         this.socketHandler = new SocketHandler({
-            connectString: "ws://localhost:8080",
+            connectString: "ws://atomicbits.pt:8080",// atomicbits.pt",
             map: this.map,
             game: this
         });
@@ -147,10 +165,11 @@ class Game {
         this.screens = {
             rooms: new RoomListScreen(this),
             home: new HomeScreen(this),
-            createRoom: new CreateRoomScreen(this)
+            createRoom: new CreateRoomScreen(this),
+            costumize: new CostumizeScreen(this)
         }
 
-        this.setScreen(this.screens.createRoom);
+        this.setScreen(this.screens.home);
     }
 
 }

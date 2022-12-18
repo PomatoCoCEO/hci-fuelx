@@ -11,7 +11,6 @@ class RoomListScreen {
         this.roomsElement = document.createElement('div');
         this.roomsElement.classList.add('rooms-list');
         for(let room of this.rooms) {
-            console.log(room);
             let roomElement = document.createElement('div');
             roomElement.classList.add('room');
             roomElement.setAttribute('data-id', room.name);
@@ -28,12 +27,20 @@ class RoomListScreen {
             `);
             this.roomsElement.appendChild(roomElement);
         }
+        if(this.rooms.length == 0) {
+            let noRoomsElement = document.createElement('div');
+            noRoomsElement.classList.add('no-room');
+            noRoomsElement.innerHTML = (`
+                <p>No rooms available</p>
+            `);
+            this.roomsElement.appendChild(noRoomsElement);
+        }
         this.element.appendChild(this.roomsElement);
 
         this.element.querySelectorAll('.room').forEach(roomElement => {
             roomElement.addEventListener('click', () => {
-                this.game.socketHandler.joinRoom(roomElement.dataset.id, 'ColdAtom');
-                this.game.startGame();
+                this.game.setScreen(this.game.screens.costumize);
+                this.game.screen.setRoom(roomElement.dataset.id);
             });
         });
     }
